@@ -55,9 +55,26 @@ _unshare(PyObject *self, PyObject *args) {
 	}
 }
 
+static PyObject *
+_setns(PyObject *self, PyObject *args) {
+	int fd, nstype;
+
+	if (!PyArg_ParseTuple(args, "ii", &fd, &nstype))
+		return NULL;
+
+	if (setns(fd, nstype) == -1) {
+		PyErr_SetFromErrno(PyExc_RuntimeError);
+		return NULL;
+	} else {
+		Py_INCREF(Py_None);
+		return Py_None;
+	}
+}
+
 static PyMethodDef LinuxMethods[] = {
 	{"pivot_root", pivot_root, METH_VARARGS, "pivot_root system call"},
 	{"unshare", _unshare, METH_VARARGS, "unshare system call"},
+	{"setns", _setns, METH_VARARGS, "setns system call"},
 	{"mount", _mount, METH_VARARGS, "mount system call"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
