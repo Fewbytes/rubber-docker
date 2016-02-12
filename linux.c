@@ -2,7 +2,11 @@
 #include <Python.h>
 #include <sys/syscall.h>
 #include <sys/mount.h>
-#include <sched.h>	
+#include <sched.h>
+#include <sys/wait.h>	
+#include <unistd.h>
+
+#define STACK_SIZE 32768
 
 static PyObject *
 pivot_root(PyObject *self, PyObject *args) {
@@ -40,6 +44,23 @@ _mount(PyObject *self, PyObject *args) {
 
 
 static PyObject *
+_umount(PyObject *self, PyObject *args) {
+	const char *target;
+
+	if (!PyArg_ParseTuple(args, "s", &target)) {
+		return NULL;
+	}
+
+	if (umount(target) == -1) {
+		PyErr_SetFromErrno(PyExc_RuntimeError);
+		return NULL;
+	} else {
+		Py_INCREF(Py_None);
+		return Py_None;
+	}	
+}
+
+static PyObject *
 _unshare(PyObject *self, PyObject *args) {
 	int clone_flags;
 
@@ -71,11 +92,73 @@ _setns(PyObject *self, PyObject *args) {
 	}
 }
 
+static int clone_callback(void *arg) {
+	PyObject *callback = (PyObject *)arg;
+
+	if (PyObject_CallObject(callback, NULL) == NULL) {
+		return -1;
+	}
+	return 0;
+}
+
+static PyObject *
+_clone(PyObject *self, PyObject *args) {
+	PyObject *callback;
+	void *child_stack;
+	int flags;
+	int child_pid;
+
+	child_stack = malloc(STACK_SIZE);
+
+	if (!PyArg_ParseTuple(args, "Oi", &callback, &flags))
+		return NULL;
+
+	if (!PyCallable_Check(callback)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+        return NULL;	
+    }
+
+	if ((child_pid = clone(&clone_callback, child_stack, flags, callback)) == -1) {
+		PyErr_SetFromErrno(PyExc_RuntimeError);
+		return NULL;
+	} else {
+		int res = waitpid(child_pid, 0, 0);
+		//free(child_stack);
+
+		if (res == -1) {
+			PyErr_SetString(PyExc_RuntimeError, "Callback raised exception");
+			return NULL;
+		}
+
+		Py_INCREF(Py_None);
+		return Py_None;
+	}
+}
+
+static PyObject *
+_sethostname(PyObject *self, PyObject *args) {
+	const char *hostname;
+
+	if (!PyArg_ParseTuple(args, "s", &hostname))
+		return NULL;
+
+	if (sethostname(hostname, strlen(hostname)) == -1) {
+		PyErr_SetFromErrno(PyExc_RuntimeError);
+		return NULL;
+	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 static PyMethodDef LinuxMethods[] = {
 	{"pivot_root", pivot_root, METH_VARARGS, "pivot_root system call"},
 	{"unshare", _unshare, METH_VARARGS, "unshare system call"},
 	{"setns", _setns, METH_VARARGS, "setns system call"},
+	{"clone", _clone, METH_VARARGS, "clone system call"},
+	{"sethostname", _sethostname, METH_VARARGS, "sethostname system call"},
 	{"mount", _mount, METH_VARARGS, "mount system call"},
+	{"umount", _umount, METH_VARARGS, "umount system call"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
