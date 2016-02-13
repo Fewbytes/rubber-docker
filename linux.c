@@ -118,18 +118,14 @@ _clone(PyObject *self, PyObject *args) {
         return NULL;	
     }
 
-	if ((child_pid = clone(&clone_callback, child_stack, flags, callback)) == -1) {
-		PyErr_SetFromErrno(PyExc_RuntimeError);
-		return NULL;
+	if ((child_pid = clone(&clone_callback, child_stack + STACK_SIZE, flags, callback)) == -1) {
+			PyErr_SetFromErrno(PyExc_RuntimeError);
+			return NULL;
 	} else {
-		int res = waitpid(child_pid, 0, 0);
-		//free(child_stack);
-
-		if (res == -1) {
+		if (waitpid(child_pid, 0, 0) == -1) {
 			PyErr_SetString(PyExc_RuntimeError, "Callback raised exception");
 			return NULL;
 		}
-
 		Py_INCREF(Py_None);
 		return Py_None;
 	}
@@ -168,12 +164,13 @@ initlinux(void)
 	PyObject *module = Py_InitModule("linux", LinuxMethods);
 
 	// clone constants
-	PyModule_AddIntConstant (module, "CLONE_NEWNS", CLONE_NEWNS);     // mount namespace
-	PyModule_AddIntConstant (module, "CLONE_NEWUTS", CLONE_NEWUTS);   // UTS (hostname) namespace
-	PyModule_AddIntConstant (module, "CLONE_NEWPID", CLONE_NEWPID);   // PID namespace
-	PyModule_AddIntConstant (module, "CLONE_NEWUSER", CLONE_NEWUSER); // users namespace
-	PyModule_AddIntConstant (module, "CLONE_NEWIPC", CLONE_NEWIPC);   // IPC namespace
-	PyModule_AddIntConstant (module, "CLONE_NEWNET", CLONE_NEWNET);   // network namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWNS", CLONE_NEWNS);     // mount namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWUTS", CLONE_NEWUTS);   // UTS (hostname) namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWPID", CLONE_NEWPID);   // PID namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWUSER", CLONE_NEWUSER); // users namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWIPC", CLONE_NEWIPC);   // IPC namespace
+	PyModule_AddIntConstant(module, "CLONE_NEWNET", CLONE_NEWNET);   // network namespace
+	PyModule_AddIntConstant(module, "CLONE_THREAD", CLONE_THREAD);
 
 	// mount constants
 	PyModule_AddIntConstant(module, "MS_RDONLY", MS_RDONLY);               /* Mount read-only.  */

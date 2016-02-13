@@ -4,6 +4,7 @@ import linux
 import tarfile
 import os
 import uuid
+import psutil
 
 
 def recover():
@@ -26,35 +27,39 @@ def prepare_rootfs():
         t.extractall('/mnt/rootfs')
 
     linux.mount('overlay', '/mnt/cowfs', 'overlay',
-                linux.MS_NODEV, "lowerdir=/mnt/rootfs,upperdir=/mnt/cowfs_rw,workdir=/mnt/cowfs_workdir")
+                linux.MS_NODEV,
+                "lowerdir=/mnt/rootfs,upperdir=/mnt/cowfs_rw,workdir=/mnt/cowfs_workdir")
+
+    # linux.mount('aufs', '/mnt/cowfs', 'aufs', linux.MS_NODEV, 'br:/mnt/cowfs_rw:/mnt/rootfs')
+    return '/mnt/cowfs'
 
 
 def mount_sysfs(new_root):
-    for mount in ['/proc', '/sys', '/dev']:
-        linux.mount(mount, new_root + mount, 'none', linux.MS_BIND, '')
+    linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
+    linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')
+    linux.mount('devpts', os.path.join(new_root, 'dev'), 'devpts', 0, '')
 
 
 def contain():
     linux.unshare(linux.CLONE_NEWNS)
-
-    os.mkdir('/mnt/cowfs/old_root')
+    new_root = prepare_rootfs()
+    os.mkdir(os.path.join(new_root, 'old_root'))
     try:
+        mount_sysfs(new_root)
         linux.pivot_root("/mnt/cowfs", "/mnt/cowfs/old_root")
-        linux.umount('/mnt/cowfs/old_root')
-        os.rmdir('/mnt/cowfs/old_root')
-        # os.chroot('/mnt/cowfs')
         os.chdir('/')
         linux.unshare(linux.CLONE_NEWIPC)
         linux.unshare(linux.CLONE_NEWUTS)
         linux.unshare(linux.CLONE_NEWNET)
         linux.sethostname(str(uuid.uuid1()))
+        #linux.umount('/old_root')
+        #os.rmdir('/old_root')
         os.execv("/bin/sh", ['/bin/sh'])
     except Exception:
         raise
 
 
-prepare_rootfs()
-mount_sysfs('/mnt/cowfs')
+linux.unshare(linux.CLONE_NEWPID)
 
 pid = os.fork()
 if pid == 0:
