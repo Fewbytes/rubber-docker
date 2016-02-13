@@ -7,19 +7,6 @@ import uuid
 import shutil
 
 
-def recover():
-    for mount in ['proc', 'sys', 'dev/pts']:
-        try:
-            linux.umount('/mnt/cowfs/' + mount)
-        except Exception as e:
-            print "Exception: %r" % e
-
-    try:
-        linux.umount('/mnt/cowfs')
-    except Exception as e:
-        print "Exception: %r" % e
-
-
 def prepare_rootfs():
     shutil.rmtree("/mnt/cowfs_rw")
     for directory in ['/mnt/rootfs', '/mnt/cowfs', '/mnt/cowfs_rw', '/mnt/cowfs_workdir']:
@@ -56,15 +43,17 @@ def contain():
     old_root = os.path.join(new_root, 'old_root')
     os.mkdir(old_root)
     try:
+        linux.unshare(linux.CLONE_NEWIPC)
+        linux.unshare(linux.CLONE_NEWUTS)
+        linux.unshare(linux.CLONE_NEWNET)
+
         mount_sysfs(new_root)
         linux.pivot_root(new_root, old_root)
         os.chdir('/')
         linux.mount(None, '/old_root', None, linux.MS_PRIVATE | linux.MS_REC, None)
         linux.umount2('/old_root', linux.MNT_DETACH)
         os.rmdir('/old_root')
-        linux.unshare(linux.CLONE_NEWIPC)
-        linux.unshare(linux.CLONE_NEWUTS)
-        linux.unshare(linux.CLONE_NEWNET)
+
         linux.sethostname(str(uuid.uuid1()))
     except Exception:
         raise
@@ -80,4 +69,3 @@ if pid == 0:
 else:
     pid, status = os.waitpid(pid, 0)
     print status
-    #recover()
