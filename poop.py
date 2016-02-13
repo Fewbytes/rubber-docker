@@ -4,7 +4,8 @@ import linux
 import tarfile
 import os
 import uuid
-import psutil
+import resource
+import shutil
 
 
 def recover():
@@ -12,13 +13,12 @@ def recover():
         for mount in ['proc', 'sys', 'dev']:
             linux.umount('/mnt/cowfs/' + mount)
         linux.umount('/mnt/cowfs')
-        if os.path.exists('/mnt/cowfs_rw/old_root'):
-            os.rmdir('/mnt/cowfs_rw/old_root')
     except Exception:
         pass
 
 
 def prepare_rootfs():
+    shutil.rmtree("/mnt/cowfs_rw")
     for directory in ['/mnt/rootfs', '/mnt/cowfs', '/mnt/cowfs_rw', '/mnt/cowfs_workdir']:
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -37,7 +37,20 @@ def prepare_rootfs():
 def mount_sysfs(new_root):
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
     linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')
-    linux.mount('devpts', os.path.join(new_root, 'dev'), 'devpts', 0, '')
+    pts_dir = os.path.join(new_root, 'dev', 'pts')
+    if not os.path.exists(pts_dir):
+        os.makedirs(pts_dir)
+    linux.mount('devpts', pts_dir, 'devpts', 0, '')
+    for i, dev in enumerate(['stdin', 'stdout', 'stderr']):
+        os.symlink('/proc/self/fd/%d' % i, os.path.join(new_root, 'dev', dev))
+
+
+def close_fds():
+    for fd in range(0, resource.getrlimit(resource.RLIMIT_NOFILE)[1]):
+        try:
+            os.close(fd)
+        except Exception:
+            pass
 
 
 def contain():
@@ -52,8 +65,8 @@ def contain():
         linux.unshare(linux.CLONE_NEWUTS)
         linux.unshare(linux.CLONE_NEWNET)
         linux.sethostname(str(uuid.uuid1()))
-        #linux.umount('/old_root')
-        #os.rmdir('/old_root')
+        linux.umount2('/old_root', linux.MNT_DETACH)
+        os.rmdir('/old_root')
         os.execv("/bin/sh", ['/bin/sh'])
     except Exception:
         raise
@@ -63,6 +76,7 @@ linux.unshare(linux.CLONE_NEWPID)
 
 pid = os.fork()
 if pid == 0:
+    # close_fds()
     contain()
 else:
     os.waitpid(pid, 0)

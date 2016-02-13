@@ -61,6 +61,24 @@ _umount(PyObject *self, PyObject *args) {
 }
 
 static PyObject *
+_umount2(PyObject *self, PyObject *args) {
+	const char *target;
+	int flags;
+
+	if (!PyArg_ParseTuple(args, "si", &target, &flags)) {
+		return NULL;
+	}
+
+	if (umount2(target, flags) == -1) {
+		PyErr_SetFromErrno(PyExc_RuntimeError);
+		return NULL;
+	} else {
+		Py_INCREF(Py_None);
+		return Py_None;
+	}	
+}
+
+static PyObject *
 _unshare(PyObject *self, PyObject *args) {
 	int clone_flags;
 
@@ -155,6 +173,7 @@ static PyMethodDef LinuxMethods[] = {
 	{"sethostname", _sethostname, METH_VARARGS, "sethostname system call"},
 	{"mount", _mount, METH_VARARGS, "mount system call"},
 	{"umount", _umount, METH_VARARGS, "umount system call"},
+	{"umount2", _umount2, METH_VARARGS, "umount2 system call"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -198,4 +217,5 @@ initlinux(void)
 	PyModule_AddIntConstant(module, "MS_STRICTATIME", MS_STRICTATIME);     /* Always perform atime updates.  */
 	PyModule_AddIntConstant(module, "MS_ACTIVE", MS_ACTIVE);
 	PyModule_AddIntConstant(module, "MS_NOUSER", MS_NOUSER);
+	PyModule_AddIntConstant(module, "MNT_DETACH", MNT_DETACH);             /* Just detach from the tree.  */
 }
