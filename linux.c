@@ -29,7 +29,7 @@ _mount(PyObject *self, PyObject *args) {
 	const char *source, *target, *filesystemtype, *mountopts;
 	unsigned long mountflags;
 
-	if (!PyArg_ParseTuple(args, "sssks", &source, &target, &filesystemtype, &mountflags, &mountopts)) {
+	if (!PyArg_ParseTuple(args, "zszkz", &source, &target, &filesystemtype, &mountflags, &mountopts)) {
 		return NULL;
 	}
 
@@ -218,4 +218,5 @@ initlinux(void)
 	PyModule_AddIntConstant(module, "MS_ACTIVE", MS_ACTIVE);
 	PyModule_AddIntConstant(module, "MS_NOUSER", MS_NOUSER);
 	PyModule_AddIntConstant(module, "MNT_DETACH", MNT_DETACH);             /* Just detach from the tree.  */
+	PyModule_AddIntConstant(module, "MS_MGC_VAL", MS_MGC_VAL);
 }
