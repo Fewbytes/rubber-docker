@@ -4,17 +4,20 @@ import linux
 import tarfile
 import os
 import uuid
-import resource
 import shutil
 
 
 def recover():
-    try:
-        for mount in ['proc', 'sys', 'dev']:
+    for mount in ['proc', 'sys', 'dev/pts']:
+        try:
             linux.umount('/mnt/cowfs/' + mount)
+        except Exception as e:
+            print "Exception: %r" % e
+
+    try:
         linux.umount('/mnt/cowfs')
-    except Exception:
-        pass
+    except Exception as e:
+        print "Exception: %r" % e
 
 
 def prepare_rootfs():
@@ -37,6 +40,8 @@ def prepare_rootfs():
 def mount_sysfs(new_root):
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
     linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')
+    linux.mount('tmpfs', os.path.join(new_root, 'dev'), 'tmpfs',
+                linux.MS_NOSUID | linux.MS_STRICTATIME, 'mode=755')
     pts_dir = os.path.join(new_root, 'dev', 'pts')
     if not os.path.exists(pts_dir):
         os.makedirs(pts_dir)
@@ -45,39 +50,34 @@ def mount_sysfs(new_root):
         os.symlink('/proc/self/fd/%d' % i, os.path.join(new_root, 'dev', dev))
 
 
-def close_fds():
-    for fd in range(0, resource.getrlimit(resource.RLIMIT_NOFILE)[1]):
-        try:
-            os.close(fd)
-        except Exception:
-            pass
-
-
 def contain():
-    linux.unshare(linux.CLONE_NEWNS)
+    linux.mount(None, '/', None, linux.MS_PRIVATE, None)
     new_root = prepare_rootfs()
-    os.mkdir(os.path.join(new_root, 'old_root'))
+    old_root = os.path.join(new_root, 'old_root')
+    os.mkdir(old_root)
     try:
         mount_sysfs(new_root)
-        linux.pivot_root("/mnt/cowfs", "/mnt/cowfs/old_root")
+        linux.pivot_root(new_root, old_root)
         os.chdir('/')
+        linux.mount(None, '/old_root', None, linux.MS_PRIVATE | linux.MS_REC, None)
+        linux.umount2('/old_root', linux.MNT_DETACH)
+        os.rmdir('/old_root')
         linux.unshare(linux.CLONE_NEWIPC)
         linux.unshare(linux.CLONE_NEWUTS)
         linux.unshare(linux.CLONE_NEWNET)
         linux.sethostname(str(uuid.uuid1()))
-        linux.umount2('/old_root', linux.MNT_DETACH)
-        os.rmdir('/old_root')
-        os.execv("/bin/sh", ['/bin/sh'])
     except Exception:
         raise
 
+    os.execv("/bin/sh", ['/bin/sh'])
 
-linux.unshare(linux.CLONE_NEWPID)
+linux.unshare(linux.CLONE_NEWPID)  # forks will be in a new PID namespace
+linux.unshare(linux.CLONE_NEWNS)  # new mount namespace
 
 pid = os.fork()
 if pid == 0:
-    # close_fds()
     contain()
 else:
-    os.waitpid(pid, 0)
-    recover()
+    pid, status = os.waitpid(pid, 0)
+    print status
+    #recover()
