@@ -1,0 +1,33 @@
+{
+	"variables": {
+	    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
+	    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+	    "aws_region": "eu-central-1",
+	    "source_ami": "ami-6dadb501"
+	},
+	"builders": [
+	    {
+	      "type": "amazon-ebs",
+	      "access_key": "{{ user `aws_access_key` }}",
+	      "secret_key": "{{ user `aws_secret_key` }}",
+	      "region": "{{ user `aws_region` }}",
+	      "source_ami": "{{ user `aws_base_ami` }}",
+	      "instance_type": "t2.micro",
+	      "ssh_username": "ubuntu",
+	      "ami_name": "rubber-docker-{{timestamp}}"
+	    }
+    ],
+    "provisioners": [
+    	{
+    		"type": "shell",
+    		"inline": [
+    			"sudo apt-get update"
+    		]
+    	},
+    	{
+    		"type": "file",
+    		"source": "",
+    		"destination": "/etc/motd"
+    	}
+    ]
+}
