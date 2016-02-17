@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Docker from Scratch workshop</title>
+
+		<meta name="description" content="Build a container tool from syscall primitives">
+		<meta name="author" content="Avishai Ish-Shalom">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="reveal.js/css/reveal.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="reveal.js/reveal.js/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Docker from Scratch</h1>
+					<p>Nati Cohen (@nocoot), Avishai Ish-Shalom (@nukemberg)</p>
+				</section>
+					
+				<section>
+					<section>
+						<h2>Workshop goal</h2>
+						<p>Understand how containers work in terms of kernel constructs:
+						<ul>
+							<li>Namespaces</li>
+							<li>CGroups</li>
+							<li>CoW filesystem</li>
+						</ul>
+						</p>
+					</section>
+					<section>
+						<h2>Docker highlevel architecture</h2>
+						<div>
+						<img src="images/docker-architecture.svg" style="height: 500px;">
+						</div>
+						<p>We're building part of libcontainer + daemon</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Let's build!</h1>
+					</section>
+					<section>
+						<h2><span style="text-transform: none;"><i>fork</i> &amp; <i>exec</i></span> a process</h2>
+					</section>
+					<section>
+						<h2 style="text-transform: none;"><i>chroot</i></h2>
+					</section>
+					<section>
+						<h2>Unpack image</h2>
+					</section>
+					<section>
+						<h2>CoW FTW!</h2>
+						<p>
+							<p>Mount an <i>overlay</i> filesystem as the rootfs</p>
+							<ul>
+								<li>Create an <i>upperdir</i> and <i>workdir</i> per container</li>
+								<li>Use the extracted image rootfs dir as <i>lowerdir</i></li>
+							</ul>
+						</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Namespaces</h2>
+						<p><p>The namespaces API:</p>
+							<ul>
+								<li><i>clone</i></li>
+								<li><i>unshare</i></li>
+								<li><i>setns</i></li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h2>The mount namespace</h2>
+					</section>
+					<section>
+						<h2 style="text-transform: none;"><i>pivot_root</i></h2>
+						<p>
+							<ul>
+								<li>Don't forget to mount private the original root filesystem</li>
+								<li>After <i>pivot_root</i> mount private recursively the old root &amp; detach it</li>
+								<li>Finally, remove the old root directory</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h2>UTS namespace and hostname</h2>
+					</section>
+					<section>
+						<h2>PID namespace</h2>
+						<p><i>unshare</i> CLONE_NEWPID before forking a new process</p>
+						<p>Can also be done via <i>clone</i></p>
+					</section>
+					<section>
+						<h2>Network namespace</h2>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>CGroups</h2>
+					</section>
+					<section>
+						<h2>The CPU controller</h2>
+						<p><p>Open a new cpu cgroup for each container. Set <i>cpu.allowed_shared</i></p>
+							<h4>Excercise</h4>
+							<ul>
+								<li>Run stress on multiple container with different shares</li>
+								<li>Inspect cpu consumption using top</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h2>The Memory controller</h2>
+						<p><p>Open a new memory cgroup for each container. Configure the following:</p>
+							<ul>
+								<li>memory.limit_in_bytes</li>
+								<li>memory.memsw.limit_in_bytes</li>
+								<li>memory.kmem.limit_in_bytes</li>
+								<li>memory.oom_control</li>
+							</ul>
+							<p>Run stress and observe how the container behaves with(out) oom killer</p>
+						</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>Bonus round!</h1>
+					</section>
+					<section>
+						<h2>Capabilities</h2>
+					</section>
+					<section>
+						<h2>setuid</h2>
+					</section>
+					<section>
+						<h2>Volumes</h2>
+						<p>mount bind</p>
+					</section>
+					<section>
+						<h2>Devices whitelist controller</h2>
+					</section>
+					<section>
+						<h2>Internal NIC &amp; port mappings</h2>
+					</section>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="reveal.js/lib/js/head.min.js"></script>
+		<script src="reveal.js/js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
