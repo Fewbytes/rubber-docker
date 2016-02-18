@@ -17,7 +17,7 @@ apt-get -y install docker-engine stress python-dev build-essential htop ipython 
 
 # Include the memory and memsw cgroups
 sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
-sed -i -r 's|GRUB_CMDLINE_LINUX_DEFAULT="(.*)"|GRUB_CMDLINE_LINUX_DEFAULT="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
+sed -i -r 's|GRUB_CMDLINE_LINUX="(.*)"|GRUB_CMDLINE_LINUX="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
 update-grub
 
 # Configure Docker to use overlayfs
