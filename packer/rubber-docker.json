@@ -11,23 +11,19 @@
 	      "access_key": "{{ user `aws_access_key` }}",
 	      "secret_key": "{{ user `aws_secret_key` }}",
 	      "region": "{{ user `aws_region` }}",
-	      "source_ami": "{{ user `aws_base_ami` }}",
-	      "instance_type": "t2.micro",
+	      "source_ami": "{{ user `source_ami` }}",
+	      "instance_type": "m3.medium",
 	      "ssh_username": "ubuntu",
-	      "ami_name": "rubber-docker-{{timestamp}}"
+	      "ami_name": "rubber-docker-{{timestamp}}",
+          "ami_groups": [
+              "all"
+          ]
 	    }
     ],
     "provisioners": [
     	{
     		"type": "shell",
-    		"inline": [
-    			"sudo apt-get update"
-    		]
-    	},
-    	{
-    		"type": "file",
-    		"source": "",
-    		"destination": "/etc/motd"
+    		"script": "bootstrap.sh"
     	}
     ]
 }
