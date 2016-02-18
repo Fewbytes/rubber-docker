@@ -3,7 +3,7 @@
 	    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
 	    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
 	    "aws_region": "eu-central-1",
-	    "source_ami": "ami-6dadb501"
+	    "source_ami": "ami-7c687210"
 	},
 	"builders": [
 	    {
@@ -12,7 +12,7 @@
 	      "secret_key": "{{ user `aws_secret_key` }}",
 	      "region": "{{ user `aws_region` }}",
 	      "source_ami": "{{ user `source_ami` }}",
-	      "instance_type": "m3.medium",
+	      "instance_type": "t2.medium",
 	      "ssh_username": "ubuntu",
 	      "ami_name": "rubber-docker-{{timestamp}}",
           "ami_groups": [
