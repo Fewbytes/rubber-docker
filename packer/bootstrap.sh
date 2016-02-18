@@ -17,12 +17,21 @@ apt-get -y install docker.io stress python-dev build-essential htop ipython
 sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
 
 # Configure Docker to use overlayfs
-echo 'DOCKER_OPTS="-s overlay"' >> /etc/default/docker
+[[ -d /etc/systemd/system/docker.service.d ]] || mkdir /etc/systemd/system/docker.service.d
+cat - >/etc/systemd/system/docker.service.d/overlay.conf <<EOF
+[Service]
+ExecStart=
+ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver overlay
+EOF
+
+# restart docker
+systemctl daemon-reload
+systemctl restart docker
 
 # Fetch images
 mkdir -p /root/images
 pushd /root/images
-for i in busybox ubuntu; do
+for i in busybox ubuntu:latest; do
     echo Fetching $i image
     docker pull $i && docker save -o $i.tar $i
 done
