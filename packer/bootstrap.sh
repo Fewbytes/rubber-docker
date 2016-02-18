@@ -9,12 +9,16 @@ fi
 sleep 10
 
 # Install packages
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/docker.list
 apt-get update
-
-apt-get -y install docker.io stress python-dev build-essential htop ipython
+apt-get -y install linux-image-extra-$(uname -r)
+apt-get -y install docker-engine stress python-dev build-essential htop ipython python-pip
 
 # Include the memory and memsw cgroups
 sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
+sed -i -r 's|GRUB_CMDLINE_LINUX_DEFAULT="(.*)"|GRUB_CMDLINE_LINUX_DEFAULT="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
+update-grub
 
 # Configure Docker to use overlayfs
 [[ -d /etc/systemd/system/docker.service.d ]] || mkdir /etc/systemd/system/docker.service.d
@@ -49,6 +53,7 @@ cat > /etc/rc.local <<'EOF'
 if [[ -d /root/rubber-docker ]]; then
     pushd /root/rubber-docker
     git pull && python setup.py install
+    [[ -f requirements.txt ]] && pip install -r requirements.txt
     popd
 fi
 EOF
