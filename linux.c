@@ -110,25 +110,34 @@ _setns(PyObject *self, PyObject *args) {
 	}
 }
 
-static int clone_callback(void *arg) {
-	PyObject *callback = (PyObject *)arg;
+struct py_clone_args {
+	PyObject *callback;
+	PyObject *callback_args;
+};
 
-	if (PyObject_CallObject(callback, NULL) == NULL) {
+static int clone_callback(void *args) {
+	PyObject *result;
+	struct py_clone_args *call_args = (struct py_clone_args *)args;
+
+	if ((result = PyObject_CallObject(call_args->callback, call_args->callback_args)) == NULL) {
+		PyErr_Print();
 		return -1;
+	} else {
+		Py_DECREF(result);
 	}
 	return 0;
 }
 
 static PyObject *
 _clone(PyObject *self, PyObject *args) {
-	PyObject *callback;
+	PyObject *callback, *callback_args;
 	void *child_stack;
 	int flags;
-	int child_pid;
+	pid_t child_pid;
 
 	child_stack = malloc(STACK_SIZE);
 
-	if (!PyArg_ParseTuple(args, "Oi", &callback, &flags))
+	if (!PyArg_ParseTuple(args, "OiO", &callback, &flags, &callback_args))
 		return NULL;
 
 	if (!PyCallable_Check(callback)) {
@@ -136,16 +145,15 @@ _clone(PyObject *self, PyObject *args) {
         return NULL;	
     }
 
-	if ((child_pid = clone(&clone_callback, child_stack + STACK_SIZE, flags, callback)) == -1) {
+    struct py_clone_args call_args;
+    call_args.callback = callback;
+    call_args.callback_args = callback_args;
+
+	if ((child_pid = clone(&clone_callback, child_stack + STACK_SIZE, flags | SIGCHLD, &call_args)) == -1) {
 			PyErr_SetFromErrno(PyExc_RuntimeError);
-			return NULL;
+			return Py_BuildValue("i", -1);
 	} else {
-		if (waitpid(child_pid, 0, 0) == -1) {
-			PyErr_SetString(PyExc_RuntimeError, "Callback raised exception");
-			return NULL;
-		}
-		Py_INCREF(Py_None);
-		return Py_None;
+		return Py_BuildValue("i", child_pid);
 	}
 }
 
