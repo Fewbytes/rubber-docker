@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 if [ $(id -u) -ne 0 ]; then
     echo "You must run this script as root. Attempting to sudo" 1>&2
@@ -33,16 +33,20 @@ systemctl daemon-reload
 systemctl restart docker
 
 # Fetch images
-mkdir -p /root/images
-pushd /root/images
+mkdir -p /workshop/images
+pushd /workshop/images
 for i in busybox ubuntu:latest; do
     echo Fetching $i image
-    docker pull $i && docker save -o $i.tar $i
+    docker pull $i
+    CONTAINER_ID=$(docker run -d $i /bin/true)
+    docker wait $CONTAINER_ID
+    docker export -o $i.tar $CONTAINER_ID
+    docker rm $CONTAINER_ID
 done
 popd
 
 # Clone git repo
-pushd /root
+pushd /workshop
 git clone https://github.com/Fewbytes/rubber-docker.git
 popd
 
@@ -50,10 +54,11 @@ popd
 cat > /etc/rc.local <<'EOF'
 #!/bin/bash
 
-if [[ -d /root/rubber-docker ]]; then
-    pushd /root/rubber-docker
+if [[ -d /workshop/rubber-docker ]]; then
+    pushd /workshop/rubber-docker
     git pull && python setup.py install
     [[ -f requirements.txt ]] && pip install -r requirements.txt
+    chown ubuntu:ubuntu -R /workshop
     popd
 fi
 EOF
@@ -61,6 +66,9 @@ EOF
 # Seutp motd
 cat > /etc/motd <<'EOF'
 Welcome to the "Docker From Scratch" workshop!
+
+Workshop material is in /workshop
+Workshop code is checked out in /workshop/rubber-docker
 
 Don't forget to have fun and break things :)
 EOF
