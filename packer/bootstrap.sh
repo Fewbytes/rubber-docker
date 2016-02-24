@@ -28,14 +28,14 @@ ExecStart=
 ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver overlay
 EOF
 
-# restart docker
+# restart docker (to use overlay)
 systemctl daemon-reload
 systemctl restart docker
 
 # Fetch images
 mkdir -p /workshop/images
 pushd /workshop/images
-for i in busybox ubuntu:latest; do
+for i in busybox ubuntu; do
     echo Fetching $i image
     docker pull $i
     CONTAINER_ID=$(docker run -d $i /bin/true)
@@ -54,13 +54,9 @@ popd
 cat > /etc/rc.local <<'EOF'
 #!/bin/bash
 
-if [[ -d /workshop/rubber-docker ]]; then
-    pushd /workshop/rubber-docker
-    git pull && python setup.py install
-    [[ -f requirements.txt ]] && pip install -r requirements.txt
-    chown ubuntu:ubuntu -R /workshop
-    popd
-fi
+# This will allow us to change rc.local stuff without regenerating the AMI
+/workshop/rubber-docker/packer/on_boot.sh
+
 EOF
 
 # Seutp motd
