@@ -5,7 +5,7 @@
 #
 # Goal: Let's get some filesystem isolation with good ol' chroot
 #       i.e. running:
-#                rd.py -i ubuntu /bin/sh
+#                rd.py run -i ubuntu /bin/sh
 #            will:
 #               fork a new process
 #                   The child will:
@@ -42,7 +42,8 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
         os.makedirs(container_root)
 
     with tarfile.open(image_path) as t:
-        t.extractall(container_root)
+        # Fun fact: tar files may contain *nix devices! *facepalm*
+        t.extractall(container_root, members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
 
     return container_root
 
@@ -63,11 +64,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
 
 @cli.command()
-@click.option()
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
 @click.option('--image-dir', help='Images directory', default='/workshop/images')
 @click.option('--container-dir', help='Containers directory', default='/workshop/containers')
-@click.argument('Command', help='The command that you want to contain', required=True, nargs=-1)
+@click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
     pid = os.fork()

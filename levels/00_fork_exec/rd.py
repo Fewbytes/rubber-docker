@@ -5,7 +5,7 @@
 #
 # Goal: We want our code to start a new linux process using the fork & exec model
 #       i.e. running:
-#                rd.py /bin/sh
+#                rd.py run /bin/sh
 #            will fork a new process which will exec '/bin/sh', while the parent waits for it to finish.
 #
 
@@ -29,7 +29,7 @@ def contain(command):
 
 
 @cli.command()
-@click.argument('Command', help='The command that you want to contain', required=True, nargs=-1)
+@click.argument('Command', required=True, nargs=-1)
 def run(command):
     pid = 0  # TODO: replace this with fork() https://docs.python.org/2/library/os.html#os.fork
     if pid == 0:
