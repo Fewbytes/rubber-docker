@@ -59,9 +59,11 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
-    # TODO: whould you like to do something before chrooting?
+    # TODO: would you like to do something before chrooting?
 
     # TODO: chroot into new_root
+
+    # TODO: something after chrooting?
 
     os.execvp(command[0], command)
 

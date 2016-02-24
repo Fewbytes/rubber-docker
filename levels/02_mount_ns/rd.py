@@ -54,6 +54,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
+    # TODO: time to say goodbye to the old mount namespace, see "man 2 unshare" to get some help
+    #   HINT 1: there is no os.unshare(), time to use the linux module we made just for you!
+    #   HINT 2: the linux module include both functions and constants! e.g. linux.CLONE_NEWNS
+
     # Create mounts (/proc, /sys, /dev) under new_root
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
     linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')
@@ -71,6 +75,8 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
     os.chroot(new_root)
 
+    os.chdir('/')
+
     os.execvp(command[0], command)
 
 
@@ -81,9 +87,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 @click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
-    # TODO: time to say goodbye to the old mount namespace, see "man 2 unshare" to get some help
-    #   HINT 1: there is no os.unshare(), time to use the linux module we made just for you!
-    #   HINT 2: the linux module include both functions and constants! e.g. linux.CLONE_NEWNS
+
     pid = os.fork()
     if pid == 0:
         # This is the child, we need to exec the command

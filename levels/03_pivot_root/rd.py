@@ -1,13 +1,13 @@
 #!/usr/bin/env python2.7
 #
 # Docker From Scratch Workshop
-# Level 2 - adding mount namespace
+# Level 3 - switching from chroot to pivot_root
 #
-# Goal: separate our mount table from the other processes
+# Goal: Use pivot_root instead of chroot, and umount old_root
 #       i.e. running:
 #                rd.py run -i ubuntu /bin/sh
 #            will:
-#               fork a new chrooted process in a new mount namespace
+#               fork a new process in a new mount namespace with a new root, make sure that you can't easily escape
 #
 
 from __future__ import print_function
@@ -55,12 +55,12 @@ def makedev(dev_path):
     for i, dev in enumerate(['stdin', 'stdout', 'stderr']):
         os.symlink('/proc/self/fd/%d' % i, os.path.join(dev_path, dev))
     os.symlink('/proc/self/fd', os.path.join(dev_path, 'fd'))
-
+    # Add extra devices
     DEVICES = {'null': (stat.S_ISCHR, 1, 3), 'zero': (stat.S_ISCHR, 1, 5),
                'random': (stat.S_ISCHR, 1, 8), 'urandom': (stat.S_ISCHR, 1, 9),
-               'consol': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_ISCHR, 5, 0),
+               'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_ISCHR, 5, 0),
                'full': (stat.S_ISCHR, 1, 7)}
-    for device, (dev_type, major, minor) in DEVICES:
+    for device, (dev_type, major, minor) in DEVICES.iteritems():
         os.mknod(os.path.join(dev_path, device), 0666 | dev_type, os.makedev(major, minor))
 
 
@@ -84,9 +84,11 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
     makedev(os.path.join(new_root, 'dev'))
 
-    # TODO: add more device (e.g. null, zero, random, urandom) using os.mknode
+    os.chroot(new_root)  # TODO: replace with pivot_root
 
-    os.chroot(new_root)
+    os.chdir('/')
+
+    # TODO: umount old root
 
     os.execvp(command[0], command)
 
