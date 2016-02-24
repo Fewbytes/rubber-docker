@@ -35,14 +35,18 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
     assert os.path.exists(image_path), "unable to locate image %s" % image_name
 
     if not os.path.exists(container_root):
+        # TODO: keep only one rootfs per image and re-use it
         os.makedirs(container_root)
+        with tarfile.open(image_path) as t:
+            # Fun fact: tar files may contain *nix devices! *facepalm*
+            t.extractall(container_root,
+                         members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
 
-    with tarfile.open(image_path) as t:
-        # Fun fact: tar files may contain *nix devices! *facepalm*
-        t.extractall(container_root,
-                     members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
+    # TODO: create directories for copy-on-write (uppperdir), overlay workdir, and a mount point
 
-    return container_root
+    # TODO: mount the overlay (HINT: use the MS_NODEV flag to mount)
+
+    return container_root  # return the mountpoint for the overlayfs
 
 
 @click.group()
@@ -80,10 +84,10 @@ def _create_mounts(new_root):
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
+    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
+
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
-
-    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
 
     linux.mount(None, '/', None, linux.MS_PRIVATE, None)
 
