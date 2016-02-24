@@ -28,7 +28,7 @@ def _get_container_path(container_id, base_path, *subdir_names):
 
 def create_container_root(image_name, image_dir, container_id, container_dir):
     image_path = _get_image_path(image_name, image_dir)
-    image_root = _get_container_path(container_id, image_dir, 'rootfs')
+    image_root = os.path.join(image_dir, image_name, 'rootfs')
 
     assert os.path.exists(image_path), "unable to locate image %s" % image_name
 
