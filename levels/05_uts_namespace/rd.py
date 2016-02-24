@@ -96,10 +96,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
     # TODO: switch to a new UTS namespace, change hostname to container_id
 
+    linux.mount(None, '/', None, linux.MS_PRIVATE, None)
+
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
-
-    linux.mount(None, '/', None, linux.MS_PRIVATE, None)
 
     _create_mounts(new_root)
 
