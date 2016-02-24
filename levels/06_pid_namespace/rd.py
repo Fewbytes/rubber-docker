@@ -94,8 +94,8 @@ def _create_mounts(new_root):
 
 def contain(command, image_name, image_dir, container_id, container_dir):
     linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
-    # TODO: switch to a new UTS namespace, change hostname to container_id
-    # HINT: use linux.sethostname()
+    linux.unshare(linux.CLONE_NEWUTS)  # switch to a new UTS namespace
+    linux.sethostname(container_id)  # change hostname to container_id
 
     linux.mount(None, '/', None, linux.MS_PRIVATE, None)
 
@@ -122,6 +122,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 @click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
+
+    # TODO: switching to a new PID namespace (using unshare) only affect the children of a process
+    #         (because we can't change the PID of a running process)
+    #       so- we'll have to unshare here OR replace os.fork() with linux.clone()
 
     pid = os.fork()
     if pid == 0:
