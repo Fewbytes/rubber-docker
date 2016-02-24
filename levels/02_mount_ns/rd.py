@@ -12,13 +12,12 @@
 
 from __future__ import print_function
 
-import os
+import linux
 import tarfile
 import uuid
 
 import click
-
-import linux
+import os
 
 
 def _get_image_path(image_name, image_dir, image_suffix='tar'):
@@ -54,7 +53,18 @@ def cli():
 def contain(command, image_name, image_dir, container_id, container_dir):
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
-    # TODO: you probably want to mount stuff here...
+
+    # Create mounts under new_root
+    linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
+    linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')
+    linux.mount('tmpfs', os.path.join(new_root, 'dev'), 'tmpfs',
+                linux.MS_NOSUID | linux.MS_STRICTATIME, 'mode=755')
+    devpts_path = os.path.join(new_root, 'dev', 'pts')
+    if not os.path.exists(devpts_path):
+        os.makedirs(devpts_path)
+        linux.mount('devpts', devpts_path, 'devpts', 0, '')
+    for i, dev in enumerate(['stdin', 'stdout', 'stderr']):
+        os.symlink('/proc/self/fd/%d' % i, os.path.join(new_root, 'dev', dev))
 
     os.chroot(new_root)
 

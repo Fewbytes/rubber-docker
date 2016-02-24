@@ -17,11 +17,13 @@
 
 from __future__ import print_function
 
+import os
 import tarfile
 import uuid
 
 import click
-import os
+
+import linux
 
 
 def _get_image_path(image_name, image_dir, image_suffix='tar'):
@@ -56,9 +58,10 @@ def cli():
 def contain(command, image_name, image_dir, container_id, container_dir):
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
-    # TODO: chroot into new_root
 
-    # TODO: ???
+    # TODO: whould you like to do something before chrooting?
+
+    # TODO: chroot into new_root
 
     os.execvp(command[0], command)
 
