@@ -42,7 +42,7 @@
 			<div class="slides">
 				<section>
 					<h1>Docker from Scratch</h1>
-					<p>Nati Cohen (@nocoot), Avishai Ish-Shalom (@nukemberg)</p>
+					<p>Nati Cohen (@nocoot)<br>Avishai Ish-Shalom (@nukemberg)</p>
 				</section>
 					
 				<section>
@@ -77,16 +77,6 @@
 					<section>
 						<h2>Unpack image</h2>
 					</section>
-					<section>
-						<h2>CoW FTW!</h2>
-						<p>
-							<p>Mount an <i>overlay</i> filesystem as the rootfs</p>
-							<ul>
-								<li>Create an <i>upperdir</i> and <i>workdir</i> per container</li>
-								<li>Use the extracted image rootfs dir as <i>lowerdir</i></li>
-							</ul>
-						</p>
-					</section>
 				</section>
 				<section>
 					<section>
@@ -111,6 +101,18 @@
 								<li>Finally, remove the old root directory</li>
 							</ul>
 						</p>
+						<h3 class="fragment">Doesn't work? new_root must be a mount!</h3>
+					</section>
+					<section>
+						<h2>CoW FTW!</h2>
+						<p>
+							<p>Mount an <i>overlay</i> filesystem as the rootfs</p>
+							<ul>
+								<li>Create an <i>upperdir</i> and <i>workdir</i> per container</li>
+								<li>Use the extracted image rootfs dir as <i>lowerdir</i></li>
+							</ul>
+						</p>
+						<h3>Now we can <i>pivot_root</i> into the CoW mount</h3>
 					</section>
 					<section>
 						<h2>UTS namespace and hostname</h2>
