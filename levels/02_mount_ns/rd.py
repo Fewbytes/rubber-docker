@@ -58,6 +58,9 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     #   HINT 1: there is no os.unshare(), time to use the linux module we made just for you!
     #   HINT 2: the linux module include both functions and constants! e.g. linux.CLONE_NEWNS
 
+    # TODO: remember shared subtrees? (https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
+    #       remount / as a private mount to avoid littering our host mount table
+
     # Create mounts (/proc, /sys, /dev) under new_root
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
     linux.mount('sysfs', os.path.join(new_root, 'sys'), 'sysfs', 0, '')

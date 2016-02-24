@@ -65,10 +65,12 @@ def makedev(dev_path):
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
-    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
-
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
+
+    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
+
+    linux.mount(None, '/', None, linux.MS_PRIVATE, None)
 
     # Create mounts (/proc, /sys, /dev) under new_root
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
