@@ -56,10 +56,10 @@ def makedev(dev_path):
         os.symlink('/proc/self/fd/%d' % i, os.path.join(dev_path, dev))
     os.symlink('/proc/self/fd', os.path.join(dev_path, 'fd'))
     # Add extra devices
-    DEVICES = {'null': (stat.S_ISCHR, 1, 3), 'zero': (stat.S_ISCHR, 1, 5),
-               'random': (stat.S_ISCHR, 1, 8), 'urandom': (stat.S_ISCHR, 1, 9),
-               'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_ISCHR, 5, 0),
-               'full': (stat.S_ISCHR, 1, 7)}
+    DEVICES = {'null': (stat.S_IFCHR, 1, 3), 'zero': (stat.S_IFCHR, 1, 5),
+               'random': (stat.S_IFCHR, 1, 8), 'urandom': (stat.S_IFCHR, 1, 9),
+               'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_IFCHR, 5, 0),
+               'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
         os.mknod(os.path.join(dev_path, device), 0666 | dev_type, os.makedev(major, minor))
 
