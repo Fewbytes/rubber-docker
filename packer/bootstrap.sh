@@ -54,6 +54,14 @@ popd
 cat > /etc/rc.local <<'EOF'
 #!/bin/bash
 
+# Pull latest version of rubber-docker, install requirements & build the C extension
+if [[ -d /workshop/rubber-docker ]]; then
+    pushd /workshop/rubber-docker
+    git pull && python setup.py install
+    [[ -f requirements.txt ]] && pip install -r requirements.txt
+    popd
+fi
+
 # This will allow us to change rc.local stuff without regenerating the AMI
 /workshop/rubber-docker/packer/on_boot.sh
 
