@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
 #
 # Docker From Scratch Workshop
-# Level 5 - add UTS namespace
+# Level 6 - add PID namespace
 #
-# Goal: Have your own private hostname!
+# Goal: Have your new process start with PID 1 :)
 #
 
 
