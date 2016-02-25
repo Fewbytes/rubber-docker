@@ -93,11 +93,6 @@ def _create_mounts(new_root):
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
-    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
-
-    # TODO: switch to a new NET namespace
-
-    linux.unshare(linux.CLONE_NEWUTS)  # switch to a new UTS namespace
     linux.sethostname(container_id)  # change hostname to container_id
 
     linux.mount(None, '/', None, linux.MS_PRIVATE, None)
@@ -126,7 +121,12 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
 
-    pid = linux.clone(contain, linux.CLONE_NEWPID, (command, image_name, image_dir, container_id, container_dir))
+    # TODO: switch to a new NET namespace
+    # linux.clone(callback, flags, callback_args) modeled after the Glibc version. see: "man 2 clone"
+    pid = linux.clone(contain,
+                      linux.CLONE_NEWPID | linux.CLONE_NEWNS | linux.CLONE_NEWUTS,
+                      (command, image_name, image_dir, container_id, container_dir))
+
     # This is the parent, pid contains the PID of the forked process
     _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
     print('{} exited with status {}'.format(pid, status))
