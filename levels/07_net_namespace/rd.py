@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
 #
 # Docker From Scratch Workshop
-# Level 5 - add UTS namespace
+# Level 7 - add network namespace
 #
-# Goal: Have your own private hostname!
+# Goal: Have your own NICs
 #
 
 
@@ -126,7 +126,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
 
-    pid = os.clone(contain, linux.CLONE_NEWPID, (command, image_name, image_dir, container_id, container_dir))
+    pid = linux.clone(contain, linux.CLONE_NEWPID, (command, image_name, image_dir, container_id, container_dir))
     # This is the parent, pid contains the PID of the forked process
     _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
     print('{} exited with status {}'.format(pid, status))
