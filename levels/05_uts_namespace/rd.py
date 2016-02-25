@@ -97,7 +97,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     # TODO: switch to a new UTS namespace, change hostname to container_id
     # HINT: use linux.sethostname()
 
-    linux.mount(None, '/', None, linux.MS_PRIVATE, None)
+    linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)
 
     new_root = create_container_root(image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))

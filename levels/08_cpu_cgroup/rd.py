@@ -1,13 +1,11 @@
 #!/usr/bin/env python2.7
 #
 # Docker From Scratch Workshop
-# Level 4 - add overlay FS
+# Level 8 - add CPU Control group
 #
-# Goal: Instead of re-extracting the image, use it as a read-only layer (lowerdir),
-#         and create a copy-on-write layer for changes (upperdir).
-#       HINT: Don't forget that overlay fs also requires a workdir
+# Goal: prevent your container from starving host processes CPU time
 #
-#   Read more on overlay FS here: https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt
+
 
 from __future__ import print_function
 
@@ -24,29 +22,40 @@ def _get_image_path(image_name, image_dir, image_suffix='tar'):
     return os.path.join(image_dir, os.extsep.join([image_name, image_suffix]))
 
 
-def _get_container_path(container_id, container_dir, *subdir_names):
-    return os.path.join(container_dir, container_id, *subdir_names)
+def _get_container_path(container_id, base_path, *subdir_names):
+    return os.path.join(base_path, container_id, *subdir_names)
 
 
 def create_container_root(image_name, image_dir, container_id, container_dir):
     image_path = _get_image_path(image_name, image_dir)
-    container_root = _get_container_path(container_id, container_dir, 'rootfs')
+    image_root = os.path.join(image_dir, image_name, 'rootfs')
 
     assert os.path.exists(image_path), "unable to locate image %s" % image_name
 
-    if not os.path.exists(container_root):
-        # TODO: keep only one rootfs per image and re-use it
-        os.makedirs(container_root)
+    if not os.path.exists(image_root):
+        os.makedirs(image_root)
         with tarfile.open(image_path) as t:
             # Fun fact: tar files may contain *nix devices! *facepalm*
-            t.extractall(container_root,
+            t.extractall(image_root,
                          members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
 
-    # TODO: create directories for copy-on-write (uppperdir), overlay workdir, and a mount point
+    # create directories for copy-on-write (uppperdir), overlay workdir, and a mount point
+    container_cow_rw = _get_container_path(container_id, container_dir, 'cow_rw')
+    container_cow_workdir = _get_container_path(container_id, container_dir, 'cow_workdir')
+    container_rootfs = _get_container_path(container_id, container_dir, 'rootfs')
+    for d in (container_cow_rw, container_cow_workdir, container_rootfs):
+        if not os.path.exists(d):
+            os.makedirs(d)
 
-    # TODO: mount the overlay (HINT: use the MS_NODEV flag to mount)
+            # mount the overlay (HINT: use the MS_NODEV flag to mount)
+    linux.mount('overlay', container_rootfs, 'overlay',
+                linux.MS_NODEV,
+                "lowerdir={image_root},upperdir={cow_rw},workdir={cow_workdir}".format(
+                    image_root=image_root,
+                    cow_rw=container_cow_rw,
+                    cow_workdir=container_cow_workdir))
 
-    return container_root  # return the mountpoint for the overlayfs
+    return container_rootfs  # return the mountpoint for the overlayfs
 
 
 @click.group()
@@ -83,8 +92,12 @@ def _create_mounts(new_root):
     makedev(os.path.join(new_root, 'dev'))
 
 
-def contain(command, image_name, image_dir, container_id, container_dir):
-    linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
+def contain(command, image_name, image_dir, container_id, container_dir, cpu_shares):
+    # TODO: insert the container to a new cpu cgroup named 'rubber_docker/container_id'
+
+    # TODO: if (cpu_shares != 0)  => set the 'cpu.shares' in our cpu cgroup
+
+    linux.sethostname(container_id)  # change hostname to container_id
 
     linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)
 
@@ -105,21 +118,22 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
 
 @cli.command()
+@click.option('--cpu-shares', help='CPU shares (relative weight)', default=0)
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
 @click.option('--image-dir', help='Images directory', default='/workshop/images')
 @click.option('--container-dir', help='Containers directory', default='/workshop/containers')
 @click.argument('Command', required=True, nargs=-1)
-def run(image_name, image_dir, container_dir, command):
+def run(cpu_shares, image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
 
-    pid = os.fork()
-    if pid == 0:
-        # This is the child, we need to exec the command
-        contain(command, image_name, image_dir, container_id, container_dir)
-    else:
-        # This is the parent, pid contains the PID of the forked process
-        _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
-        print('{} exited with status {}'.format(pid, status))
+    # linux.clone(callback, flags, callback_args) modeled after the Glibc version. see: "man 2 clone"
+    pid = linux.clone(contain,
+                      linux.CLONE_NEWPID | linux.CLONE_NEWNS | linux.CLONE_NEWUTS | linux.CLONE_NEWNET,
+                      (command, image_name, image_dir, container_id, container_dir, cpu_shares))
+
+    # This is the parent, pid contains the PID of the forked process
+    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    print('{} exited with status {}'.format(pid, status))
 
 
 if __name__ == '__main__':
