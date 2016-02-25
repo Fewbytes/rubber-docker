@@ -61,7 +61,7 @@
 						<div>
 						<img src="images/docker-architecture.svg" style="height: 500px;">
 						</div>
-						<p>We're building part of libcontainer + daemon</p>
+						<p>We're building part of libcontainer + daemon + cli</p>
 					</section>
 				</section>
 				<section>
@@ -73,9 +73,7 @@
 					</section>
 					<section>
 						<h2 style="text-transform: none;"><i>chroot</i></h2>
-					</section>
-					<section>
-						<h2>Unpack image</h2>
+						<h4>Maybe unpack an image too?</h4>
 					</section>
 				</section>
 				<section>
@@ -96,8 +94,7 @@
 						<h2 style="text-transform: none;"><i>pivot_root</i></h2>
 						<p>
 							<ul>
-								<li>Don't forget to mount private the original root filesystem</li>
-								<li>After <i>pivot_root</i> mount private recursively the old root &amp; detach it</li>
+								<li>Don't forget to mount private (recursively) the original root filesystem (why?)</li>
 								<li>Finally, remove the old root directory</li>
 							</ul>
 						</p>
@@ -108,8 +105,8 @@
 						<p>
 							<p>Mount an <i>overlay</i> filesystem as the rootfs</p>
 							<ul>
-								<li>Create an <i>upperdir</i> and <i>workdir</i> per container</li>
 								<li>Use the extracted image rootfs dir as <i>lowerdir</i></li>
+								<li>Create an <i>upperdir</i> and <i>workdir</i> per container</li>
 							</ul>
 						</p>
 						<h3>Now we can <i>pivot_root</i> into the CoW mount</h3>
@@ -182,6 +179,11 @@
 					<section>
 						<h2>Internal NIC &amp; port mappings</h2>
 					</section>
+				</section>
+				<section>
+					<img src="images/thats-all-folks.jpg">
+					<p>Workshop materials: <a href="https://github.com/Fewbytes/rubber-docker">github.com/Fewbytes/rubber-docker</a><br>
+					Preparation talk slides: <a href="https://docs.google.com/presentation/d/10vFQfEUvpf7qYyksNqiy-bAxcy-bvF0OnUElCOtTTRc/edit?usp=sharing">Google docs</a></p>
 				</section>
 			</div>
 
