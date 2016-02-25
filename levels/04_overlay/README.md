@@ -2,7 +2,7 @@
 
 So far, unpacking the image every time was slow and we want fast startup times for our containers. In addition, it would be nice if every container won't take so much space (~ 180MB in ubuntu minimal's case).
 
-In this level, we will add overlayfs. A secondary win is that now we can make *pivot_root()* work since our new root will be a mountpoint!
+In this level, we will add overlayfs. A secondary win is that now we can make `pivot_root()` work since our new root will be a mountpoint!
 
 After implementing this step, try a few things to see how overlayfs behaves:
 - write a file using `dd` inside the container and see if you can fill the host drive
