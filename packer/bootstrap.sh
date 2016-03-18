@@ -14,6 +14,8 @@ echo "deb https://apt.dockerproject.org/repo ubuntu-$(lsb_release -c -s) main" >
 apt-get update
 apt-get -y install linux-image-extra-$(uname -r)
 apt-get -y install docker-engine stress python-dev build-essential htop ipython python-pip
+# for vim YouCompleteMe
+apt-get -y install vim-youcompleteme
 
 # Include the memory and memsw cgroups
 sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
@@ -74,5 +76,17 @@ Welcome to the "Docker From Scratch" workshop!
 Workshop material is in /workshop
 Workshop code is checked out in /workshop/rubber-docker
 
+Hint: you probably want to work as root.
+
 Don't forget to have fun and break things :)
 EOF
+
+# setup vim
+cd ~
+vam install youcompleteme
+cat > .vimrc <<'EOF'
+set bg=dark
+syntax on
+filetype indent plugin on
+EOF
+cd -
