@@ -35,6 +35,18 @@ def _get_container_path(container_id, container_dir, *subdir_names):
 
 
 def create_container_root(image_name, image_dir, container_id, container_dir):
+    """
+    Create a container root by extracting an image into a new directory
+    Usage:
+    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
+
+    @param image_name: the image name to extract
+    @param image_dir: the directory to lookup image tarballs in
+    @param container_id: the unique container id
+    @param container_dir: the base directory of newly generated container directories
+    @retrun: new container root directory
+    @rtype: str
+    """
     image_path = _get_image_path(image_name, image_dir)
     container_root = _get_container_path(container_id, container_dir, 'rootfs')
 
@@ -56,13 +68,10 @@ def cli():
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
-    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
-    print('Created a new root fs for our container: {}'.format(new_root))
-
     # TODO: would you like to do something before chrooting?
+    # print('Created a new root fs for our container: {}'.format(new_root))
 
     # TODO: chroot into new_root
-
     # TODO: something after chrooting?
 
     os.execvp(command[0], command)
