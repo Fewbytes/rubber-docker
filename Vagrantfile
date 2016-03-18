@@ -22,5 +22,6 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y python-dev python-pip build-essential docker-engine
 
     sudo pip install ipython
+    sudo pip install -r /vagrant/requirements.txt
   SHELL
 end
