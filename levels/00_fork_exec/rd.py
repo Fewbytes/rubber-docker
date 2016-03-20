@@ -22,7 +22,7 @@ def cli():
 
 def contain(command):
     # TODO: exec command, note the difference between the exec flavours
-    #       https://docs.python.org/2/library/os.html#os.execl
+    #       https://docs.python.org/2/library/os.html#os.execv
     # NOTE: command is an array (first element is path/file, and the entire array is exec's args)
 
     pass  # TODO: remove this after adding exec
