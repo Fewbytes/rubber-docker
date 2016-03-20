@@ -7,4 +7,38 @@ Ok, obviously `chroot()` isn't good enough. Let's try using `pivot_root()` - rem
 Because we are using mount namespace which internally uses mount bind mechanism, by default our (sub)mounts will be seen by the parent mount (and mount namespace). To avoid that we need to mount private the root mount immediately after moving to the new mount namespace - also, this needs to be done *recursively* for all submounts, otherwise we will end up unmounting important things like `/dev/pts` :)
 
 After using `pivot_root()` we need to `umount2()` the `old_root`. We need to use umount2 and not umount because we need to pass certain flags to the call, specifically we need to detach. See `man 2 umount` for details.
- 
+
+## Relevant Documentation
+
+- [man 2 pivot_root](http://linux.die.net/man/2/pivot_root)
+- [man 2 umount](http://linux.die.net/man/2/umount)
+
+## How to check your work
+
+Within the container, you should see a new *rootfs* device; However, this step will actually fail:
+
+```
+$ python rd.py run -i ubuntu /bin/bash
+Created a new root fs for our container: /workshop/containers/f793960b-64bd-4c21-9a7f-da1b0fbe9aad/rootfs
+Traceback (most recent call last):
+  File "rd.py", line 126, in <module>
+    cli()
+  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 700, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 680, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 1027, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 873, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 508, in invoke
+    return callback(*args, **kwargs)
+  File "rd.py", line 118, in run
+    contain(command, image_name, image_dir, container_id, container_dir)
+  File "rd.py", line 98, in contain
+    linux.pivot_root(new_root, old_root)
+RuntimeError: (16, 'Device or resource busy')
+10766 exited with status 256
+```
+
+The reason this step will fail is that *pivot_root(new_root, put_old)* requires *new_root* to be a different filesystem then the old root. This will be resolved in step 04 when we mount a overlay filesystem as *new_root*.

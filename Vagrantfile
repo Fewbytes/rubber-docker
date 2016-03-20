@@ -16,5 +16,6 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo bash /vagrant/packer/bootstrap.sh
+    sudo bash /etc/rc.local
   SHELL
 end
