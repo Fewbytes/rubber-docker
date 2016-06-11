@@ -10,6 +10,6 @@ Use [the provided slides](https://github.com/Fewbytes/rubber-docker/tree/master/
 ## Quickstart
 There are currently 3 options to start the workshop by yourself:
 
- 1. We created a public AMI with the required configuration and utilities already installed: ami-8faab0e3
+ 1. We created a public AMI with the required configuration and utilities already installed: ami-8faab0e3 (eu-west-1)
  2. We provide a [packer template](https://www.packer.io/) so you can create your own AMI
  3. We have a [Vagrantfile](https://www.vagrantup.com/) for you to run using your favorite virtual machine hypervisor (NOTE: still not fully tested)
