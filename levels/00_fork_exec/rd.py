@@ -35,6 +35,7 @@ def run(command):
     if pid == 0:
         # This is the child, we need to exec the command
         contain(command)
+        os._exit(0)
     else:
         # This is the parent, pid contains the PID of the forked process
         _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
