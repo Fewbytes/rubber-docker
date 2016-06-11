@@ -114,12 +114,15 @@ def run(image_name, image_dir, container_dir, command):
 
     pid = os.fork()
     if pid == 0:
-        # This is the child, we need to exec the command
-        contain(command, image_name, image_dir, container_id, container_dir)
-    else:
-        # This is the parent, pid contains the PID of the forked process
-        _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
-        print('{} exited with status {}'.format(pid, status))
+        # This is the child, we'll try to do some containment here
+        try:
+            contain(command, image_name, image_dir, container_id, container_dir)
+        finally:
+            os._exit(1)  # something went wrong in contain()
+
+    # This is the parent, pid contains the PID of the forked process
+    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    print('{} exited with status {}'.format(pid, status))
 
 
 if __name__ == '__main__':

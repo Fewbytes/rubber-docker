@@ -25,7 +25,7 @@ def contain(command):
     #       https://docs.python.org/2/library/os.html#os.execv
     # NOTE: command is an array (first element is path/file, and the entire array is exec's args)
 
-    pass  # TODO: remove this after adding exec
+    os._exit(0)  # TODO: remove this after adding exec
 
 
 @cli.command()
@@ -33,12 +33,15 @@ def contain(command):
 def run(command):
     pid = 0  # TODO: replace this with fork() https://docs.python.org/2/library/os.html#os.fork
     if pid == 0:
-        # This is the child, we need to exec the command
-        contain(command)
-    else:
-        # This is the parent, pid contains the PID of the forked process
-        _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
-        print('{} exited with status {}'.format(pid, status))
+        # This is the child, we'll try to do some containment here
+        try:
+            contain(command)
+        finally:
+            os._exit(1)  # something went wrong in contain()
+
+    # This is the parent, pid contains the PID of the forked process
+    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    print('{} exited with status {}'.format(pid, status))
 
 
 if __name__ == '__main__':
