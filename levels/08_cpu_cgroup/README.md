@@ -17,7 +17,7 @@ We then move the contained process to the group by writing its pid to the `tasks
 ## How to check your work
 Look at the content of `/proc/self/cgroup` from within a container to verify it is in a new cpu cgroup:
 ```
-root@vagrant-ubuntu-wily-64:/workshop/rubber-docker/levels/09_memory_cgorup# python rd.py run -i ubuntu /bin/bash
+$ python rd.py run -i ubuntu /bin/bash
 Created a new root fs for our container: /workshop/containers/57f02a16-4515-4068-b097-b241b66e4987/rootfs
 root@57f02a16-4515-4068-b097-b241b66e4987:/# cat /proc/self/cgroup
 10:hugetlb:/user.slice/user-1000.slice/session-2.scope
