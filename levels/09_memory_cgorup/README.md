@@ -6,7 +6,8 @@ In this level we limit memory usage of the container. Create a directory inside 
 
 After setting the limits, run a container with the stress tool and observe what happens when your container goes over the allotted limit.
 
-Bonus: read about and use the following control files
+## Bonus round
+read about and use the following control files
 - `memory.oom_control`
 - `memory.swappiness`
 - `memory.kmem.limit_in_bytes`

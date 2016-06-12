@@ -9,8 +9,7 @@ Our version of `clone()` exposed by the `linux` module mirror the `libc` API (be
 linux.clone(python_callable, flags, callable_args_tuple) # --> returns pid of new process
 ```
 
-
-Exercises:
+## Exercises
 - Try using the PID namespace without the `/proc` mount or mount binding the original `/proc` mount. How do tools like `ps` behave in this case?
 - Try `kill -9 1` from within the container
 - Try generating zombies within the container
