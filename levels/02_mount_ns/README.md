@@ -4,6 +4,7 @@ Let's add a mount namespace using the `unshare()` call.
 Mount namespaces essentially work like bind mounts - operations in mount namespaces will be propagated to other namespaces *unless* we make the parent mount (/ in our case) a *private* mount (or similar).
 For this reason, we need to change / to a private mount. This is done using the *mount()* syscall with `MS_PRIVATE` and `MS_REC` flags (why do we need `MS_REC`?)
 
+Python doesn't have the mount syscall exposed. Use `linux` module provided in this repo instead.
 
 Also, it's time to create device nodes in our container root using `mknod()`:
 
