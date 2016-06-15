@@ -31,3 +31,5 @@ To understand how these mechanisms work, it's a good idea to revisit how relevan
 After going over the primitives, let's see how the new mechanisms work:
 - [Namespaces](prep-namespaces.md)
 - [cgroups](prep-cgroups.md)
+- [seccomp](prep-seccomp.md)
+- [capabilities](prep-capabilities.md)
