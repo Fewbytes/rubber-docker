@@ -1,6 +1,6 @@
 # Level 03: pivot_root
 
-After succesfully jailing a process with `chroot()`, let's escape from this jail: copy the breakout.py script into the chroot and run it!
+After successfully jailing a process with `chroot()`, let's escape from this jail: copy the `breakout.py` script into the chroot and run it!
 
 Ok, obviously `chroot()` isn't good enough. Let's try using `pivot_root()` - remember that *pivot_root()* works on **all** processes - luckily we are using mount namespaces.
 
@@ -41,4 +41,4 @@ RuntimeError: (16, 'Device or resource busy')
 10766 exited with status 256
 ```
 
-The reason this step will fail is that *pivot_root(new_root, put_old)* requires *new_root* to be a different filesystem then the old root. This will be resolved in step 04 when we mount a overlay filesystem as *new_root*.
+The reason this step will fail is that *pivot_root(new_root, put_old)* requires *new_root* to be a different filesystem then the old root. This will be resolved in step 04 when we mount a overlay filesystem as *new_root*. Alternatively you can copy the image files to a loop device and mount it.
