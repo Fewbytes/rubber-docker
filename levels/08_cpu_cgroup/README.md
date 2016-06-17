@@ -30,6 +30,9 @@ root@57f02a16-4515-4068-b097-b241b66e4987:/# cat /proc/self/cgroup
 3:memory:/user.slice/user-1000.slice/session-2.scope
 2:freezer:/user.slice/user-1000.slice/session-2.scope
 1:name=systemd:/user.slice/user-1000.slice/session-2.scope
+
+root@57f02a16-4515-4068-b097-b241b66e4987:/# grep 57f02a16-4515-4068-b097-b241b66e4987 /proc/self/cgroup
+7:cpu,cpuacct:/rubber_docker/57f02a16-4515-4068-b097-b241b66e4987
 ```
 
 Alternatively, you can look from the host at `/sys/fs/cgroup/cpu`:
