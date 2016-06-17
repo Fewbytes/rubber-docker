@@ -13,6 +13,7 @@ from __future__ import print_function
 
 import click
 import os
+import traceback
 
 
 @click.group()
@@ -36,7 +37,8 @@ def run(command):
         # This is the child, we'll try to do some containment here
         try:
             contain(command)
-        finally:
+        except Exception:
+            traceback.print_exc()
             os._exit(1)  # something went wrong in contain()
 
     # This is the parent, pid contains the PID of the forked process

@@ -18,6 +18,7 @@ import uuid
 import click
 import os
 import stat
+import traceback
 
 
 def _get_image_path(image_name, image_dir, image_suffix='tar'):
@@ -101,7 +102,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     os.chdir('/')
 
     linux.umount2('/old_root', linux.MNT_DETACH)  # umount old root
-
+    os.rmdir('/old_root') # rmdir the old_root dir
     os.execvp(command[0], command)
 
 
@@ -118,7 +119,8 @@ def run(image_name, image_dir, container_dir, command):
         # This is the child, we'll try to do some containment here
         try:
             contain(command, image_name, image_dir, container_id, container_dir)
-        finally:
+        except Exception:
+            traceback.print_exc()
             os._exit(1)  # something went wrong in contain()
 
     # This is the parent, pid contains the PID of the forked process

@@ -146,6 +146,7 @@ def contain(command, image_name, image_dir, container_id, container_dir, cpu_sha
     os.chdir('/')
 
     linux.umount2('/old_root', linux.MNT_DETACH)  # umount old root
+    os.rmdir('/old_root') # rmdir the old_root dir
 
     # TODO: if user is set, drop privileges using os.setuid() (and optionally os.setgid())
 
