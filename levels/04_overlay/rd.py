@@ -30,12 +30,13 @@ def _get_container_path(container_id, container_dir, *subdir_names):
 
 def create_container_root(image_name, image_dir, container_id, container_dir):
     image_path = _get_image_path(image_name, image_dir)
-    container_root = _get_container_path(container_id, container_dir, 'rootfs')
-
     assert os.path.exists(image_path), "unable to locate image %s" % image_name
 
+    # TODO: Instead of creating the container_root and extracting to it, create an images_root
+    # keep only one rootfs per image and re-use it
+    container_root = _get_container_path(container_id, container_dir, 'rootfs')
+
     if not os.path.exists(container_root):
-        # TODO: keep only one rootfs per image and re-use it
         os.makedirs(container_root)
         with tarfile.open(image_path) as t:
             # Fun fact: tar files may contain *nix devices! *facepalm*
@@ -46,7 +47,7 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
 
     # TODO: mount the overlay (HINT: use the MS_NODEV flag to mount)
 
-    return container_root  # return the mountpoint for the overlayfs
+    return container_root  # return the mountpoint for the mounted overlayfs
 
 
 @click.group()

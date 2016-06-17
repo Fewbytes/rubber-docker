@@ -1,8 +1,10 @@
 # level 04: overlay CoW filesystem
 
-So far, unpacking the image every time was slow and we want fast startup times for our containers. In addition, it would be nice if every container won't take so much space (~ 180MB in ubuntu minimal's case).
+So far, unpacking the image every time was slow and we want fast startup times for our containers. Also, it would be nice if every container won't take so much space (~ 180MB in ubuntu minimal's case).
 
 In this level, we will add overlayfs. A secondary win is that now we can make `pivot_root()` work since our new root will be a mountpoint!
+
+What we want to do is extract the image to an *image_root* directory if it's not extracted already, then create a *contaner_dir* with a mount directory for overlayfs, a directory for the writable branch (*upperdir*) and a directory for the *workdir*.
 
 ## Excersices
 
