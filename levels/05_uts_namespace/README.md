@@ -9,7 +9,7 @@ Python 2.x doesn't have a `sethostname` call, so use the one provided by our `li
 Hostname within the container should be different from outside. Specifically, we want the hostname to be the container ID.
 
 ```
-$ python rd.py run -i ubuntu /bin/bash -- -c hostname
+$ sudo python rd.py run -i ubuntu /bin/bash -- -c hostname
 0c96ccc-ee60-11e5-b7ff-600308a39608
 11196 exited with status 0
 ```

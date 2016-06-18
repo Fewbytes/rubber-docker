@@ -20,7 +20,7 @@ After implementing this step, try a few things to see how overlayfs behaves:
 ## How to check your work
 
 ```
-$ time python rd.py run -i ubuntu /bin/bash -- -c true
+$ time sudo python rd.py run -i ubuntu /bin/bash -- -c true
 Created a new root fs for our container: /workshop/containers/7a3393a1-df94-4c44-a935-700ec52c2607/rootfs
 11191 exited with status 0
 
@@ -28,7 +28,7 @@ real	0m3.475s
 user	0m1.492s
 sys	0m1.260s
 
-$ time python rd.py run -i ubuntu /bin/bash -- -c true
+$ time sudo python rd.py run -i ubuntu /bin/bash -- -c true
 Created a new root fs for our container: /workshop/containers/98282744-82bd-4c70-bbf9-028e8c92f995/rootfs
 11196 exited with status 0
 

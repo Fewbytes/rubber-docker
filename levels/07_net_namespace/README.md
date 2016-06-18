@@ -12,7 +12,7 @@ Bonus: iproute2 toolchain also allows fiddling with network namespaces. Have a l
 ## How to check your work
 Run the container and use `ip link` or `ifconfig` to browse the available NICs. You should see only `lo` (if using `ip link`) or no NICs (if using `ifconfig`)
 ```
-$ python rd.py run -i ubuntu /bin/bash
+$ sudo python rd.py run -i ubuntu /bin/bash
 Created a new root fs for our container: /workshop/containers/9feb3d2d-725b-4c36-8c4d-0c586766f6f6/rootfs
 root@9feb3d2d-725b-4c36-8c4d-0c586766f6f6:/# ip a
 1: lo: <LOOPBACK> mtu 65536 qdisc noop state DOWN group default

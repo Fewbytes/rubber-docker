@@ -21,7 +21,7 @@ After setting the limits, run a container with the stress tool and observe what 
 ## How to check your work
 From the container:
 ```
-$ python rd.py run -i ubuntu --memory 128m --memory-swap 150m /bin/bash
+$ sudo python rd.py run -i ubuntu --memory 128m --memory-swap 150m /bin/bash
 Created a new root fs for our container: /workshop/containers/1e9b16b3-3ea3-4cad-84e1-f623ba4deada/rootfs
 root@1e9b16b3-3ea3-4cad-84e1-f623ba4deada:/# cat /proc/self/cgroup
 10:hugetlb:/user.slice/user-1000.slice/session-2.scope

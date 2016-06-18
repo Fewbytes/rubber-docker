@@ -23,7 +23,7 @@ linux.clone(python_callable, flags, callable_args_tuple) # --> returns pid of ne
 
 Various process listing commands and the */proc* filesystem should show only container processes:
 ```
-$ python rd.py run -i ubuntu /bin/bash
+$ sudo python rd.py run -i ubuntu /bin/bash
 Created a new root fs for our container: /workshop/containers/a4725e53-b164-4b60-ab6f-8ee527258f71/rootfs
 root@a4725e53-b164-4b60-ab6f-8ee527258f71:/# ps
   PID TTY          TIME CMD

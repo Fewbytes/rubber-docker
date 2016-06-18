@@ -18,7 +18,7 @@ After using `pivot_root()` we need to `umount2()` the `old_root`. We need to use
 Within the container, you should see a new *rootfs* device; However, this step will actually fail:
 
 ```
-$ python rd.py run -i ubuntu /bin/bash
+$ sudo python rd.py run -i ubuntu /bin/bash
 Created a new root fs for our container: /workshop/containers/f793960b-64bd-4c21-9a7f-da1b0fbe9aad/rootfs
 Traceback (most recent call last):
   File "rd.py", line 126, in <module>

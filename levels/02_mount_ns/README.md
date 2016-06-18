@@ -23,7 +23,7 @@ Verify your new forked process is in a different mount namespace
 ```bash
 $ ls -lh /proc/self/ns/mnt
 lrwxrwxrwx 1 root root 0 Mar 18 04:13 /proc/self/ns/mnt -> mnt:[4026531840]
-$ python rd.py run -i ubuntu-trusty /bin/bash
+$ sudo python rd.py run -i ubuntu-trusty /bin/bash
 $ ls -lh /proc/self/ns/mnt
 lrwxrwxrwx 1 root root 0 Mar 18 04:13 /proc/self/ns/mnt -> mnt:[4026532139]
 ```
