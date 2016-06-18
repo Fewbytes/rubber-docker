@@ -43,7 +43,12 @@ else:
 ## How to check your work
 
 ```
-$ python rd.py run /bin/echo "Hello Docker!"                                                                
-Hello Docker!                                                                                                                                                                 
+$ python rd.py run /bin/echo "Hello Docker"
+Hello Docker
+
 3620 exited with status 0
 ```
+
+## Bonus
+
+Can you use another exec variant to manipulate your child process environment variables (similar to [docker run -e](https://docs.docker.com/engine/reference/run/#env-environment-variables))?
