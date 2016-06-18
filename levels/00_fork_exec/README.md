@@ -12,7 +12,7 @@ Right now the skeleton doesn't actually do much, so at a bare minimum we need to
 In \*nix family of operating systems, new processes are spawned using *fork-exec* -
 the *fork* call and the *exec* call work together to create the new process.
 
-*fork()* is the name of the system call (actually a *libc* call in Linux) that the parent process uses to "divide" itself ("fork" into two identical processes). After calling fork(), the created child process is an exact copy of the parent except for the return value. In some cases the two continue to run the same binary, but often one (usually the child) switches to running another binary executable using the *exec()* system call (actually a family of calls).
+*fork()* is the name of the system call (actually a *libc* call in Linux) that the parent process uses to "divide" itself ("fork" into two identical processes). After calling fork(), the created child process is an exact copy of the parent except for the return value and execution will proceed from the same point in the program - the return of the *fork()* call. In some cases the two processes continue to run the same binary, but often one (usually the child) switches to running another binary executable using the *exec()* system call (actually a family of calls).
 
 When a process forks, a complete copy of the executing program is made into the new process. This new process (which is a child of the parent) has a new PID. The *fork()* function returns the child's PID to the parent, while it returns 0 to the child, in order to allow the two identical processes to distinguish one another.
 
