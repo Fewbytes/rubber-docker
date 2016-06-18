@@ -24,7 +24,7 @@ Remember we are not using mount namespace yet!
 
 Without extracting an image:
 ```
-$ python rd.py run -i ubuntu-trusty /bin/bash
+$ sudo python rd.py run -i ubuntu-trusty /bin/bash
 Created a new root fs for our container: /workshop/containers/3cfcd2b8-3f45-4531-af8a-62fc85b36755/rootfs
 Traceback (most recent call last):
   File "rd.py", line 90, in <module>
@@ -46,7 +46,7 @@ OSError: [Errno 2] No such file or directory
 
 With an extracted image:
 ```shell
-$ python rd.py run -i ubuntu-trusty /bin/bash
+$ sudo python rd.py run -i ubuntu-trusty /bin/bash
 $ ls /
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 $ touch /test
