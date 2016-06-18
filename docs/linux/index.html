@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Docker from Scratch workshop &mdash; Rubber Docker 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Rubber Docker 0.1 documentation" href="#" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-linux">
+<span id="docker-from-scratch-workshop"></span><h1>Docker from Scratch workshop<a class="headerlink" href="#module-linux" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="linux">
+<h2>linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>The linux module is a simple Python c extension, containing syscall wrappers
+missing from the Python os module. You will need to use these system calls
+to implement different aspect of process containment during the workshop.</p>
+<dl class="function">
+<dt id="linux.clone">
+<code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.clone" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><em>callback</em>, <em>flags</em>, <em>callback_args</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>create a child process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>callback</strong> (<em>str</em>) &#8211; python function to be executed by the forked child</li>
+<li><strong>flags</strong> (<em>int</em>) &#8211; combination (using <code class="docutils literal"><span class="pre">|</span></code>) of flags specifying what should be shared
+between the calling process and the child process. See below.</li>
+<li><strong>callback_args</strong> (<em>str</em>) &#8211; tuple of arguments for the callback function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">On success, the thread ID of the child process</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if clone fails</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Useful flags:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS IPC namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.mount">
+<code class="descclassname">linux.</code><code class="descname">mount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.mount" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">mount</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>filesystemtype</em>, <em>mountflags</em>, <em>mountopts</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>mount filesystem</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>source</strong> (<em>str</em>) &#8211; filesystem to attach (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
+<li><strong>target</strong> (<em>str</em>) &#8211; directory being attached to, or manipulated (in case of flag change)</li>
+<li><strong>filesystemtype</strong> (<em>str</em>) &#8211; filesystem supported by the kernel (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
+<li><strong>mountflags</strong> (<em>int</em>) &#8211; any combination (using <code class="docutils literal"><span class="pre">|</span></code>) of mount flags supported by mount(2).
+For the workshop you are most likely to use <code class="docutils literal"><span class="pre">0</span></code> (i.e. no flags), 
+or a combination of: <code class="docutils literal"><span class="pre">linux.MS_REC</span></code>, <code class="docutils literal"><span class="pre">linux.MS_PRIVATE</span></code></li>
+<li><strong>mountopts</strong> (<em>str</em>) &#8211; options passed to the specified filesystem (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if mount fails</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.pivot_root">
+<code class="descclassname">linux.</code><code class="descname">pivot_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.pivot_root" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">pivot_root</code><span class="sig-paren">(</span><em>new_root</em>, <em>put_old</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>change the root filesystem</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>new_root</strong> (<em>str</em>) &#8211; New root file system</li>
+<li><strong>put_old</strong> (<em>str</em>) &#8211; Directory to move the current process root file system to</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if pivot_root fails</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE:</strong> The following restrictions apply to <cite>new_root</cite> and <cite>put_old</cite>:</p>
+<ul class="simple">
+<li>They must be directories.</li>
+<li><cite>new_root</cite> and put_old must not be on the same filesystem as the current root.</li>
+<li><cite>put_old</cite> must  be  underneath <cite>new_root</cite>, that is, adding a nonzero number
+of /.. to the string pointed to by <cite>put_old</cite> must yield the same directory as
+<cite>new_root</cite>.</li>
+<li>No other filesystem may be mounted on <cite>put_old</cite>.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.sethostname">
+<code class="descclassname">linux.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.sethostname" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>set hostname</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<em>str</em>) &#8211; new hostname value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if sethostname fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.setns">
+<code class="descclassname">linux.</code><code class="descname">setns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.setns" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">setns</code><span class="sig-paren">(</span><em>fd</em>, <em>nstype</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>reassociate thread with a namespace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fd</strong> (<em>int</em>) &#8211; file descriptor referring to a namespace to associate with</li>
+<li><strong>nstype</strong> (<em>int</em>) &#8211; one of the following: <code class="docutils literal"><span class="pre">0</span></code> (Allow any type of namespace to be joined),
+<code class="docutils literal"><span class="pre">CLONE_NEWIPC</span></code> (join IPC namespace), <code class="docutils literal"><span class="pre">CLONE_NEWNET</span></code> (join network 
+namespace), or <code class="docutils literal"><span class="pre">CLONE_NEWUTS</span></code> (join UTS namespace)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if setns fails</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.umount">
+<code class="descclassname">linux.</code><code class="descname">umount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">umount</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>unmount filesystem</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>str</em>) &#8211; the (topmost) filesystem this directory is mounted on will be removed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if umount fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.umount2">
+<code class="descclassname">linux.</code><code class="descname">umount2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">umount2</code><span class="sig-paren">(</span><em>target</em>, <em>flags</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>unmount filesystem but allows additional <cite>flags</cite> controlling the behavior of the operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>target</strong> (<em>str</em>) &#8211; the (topmost) filesystem this directory is mounted on will be removed</li>
+<li><strong>flags</strong> (<em>int</em>) &#8211; control the behavior of the operation. You can combine multiple flags
+using <code class="docutils literal"><span class="pre">|</span></code>. For the workshop you are most likely to use
+<code class="docutils literal"><span class="pre">linux.MNT_DETACH</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if umount2 fails</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="linux.unshare">
+<code class="descclassname">linux.</code><code class="descname">unshare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.unshare" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">linux.</code><code class="descname">unshare</code><span class="sig-paren">(</span><em>flags</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>disassociate parts of the process execution context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flags</strong> (<em>int</em>) &#8211; which parts of the execution context should be unshared. You can
+combine multiple flags using <code class="docutils literal"><span class="pre">|</span></code>. See below for flags you might want
+to use in this workshop</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if unshare fails</td>
+</tr>
+</tbody>
+</table>
+<p>Useful flags:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS IPC namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the network namespace</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Docker from Scratch workshop</a><ul>
+<li><a class="reference internal" href="#linux">linux</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Avishai Ish-Shalom, Nati Cohen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
