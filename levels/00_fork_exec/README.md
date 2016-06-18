@@ -36,4 +36,7 @@ else:
 ## How to check your work
 
 ```
-$ python rd.py run -- /bin/bash -c "echo test"                                 test                                                                                                                                                10722 exited with status 0                                  ```
+$ python rd.py run -- /bin/bash -c "echo test"
+test
+10722 exited with status 0
+```
