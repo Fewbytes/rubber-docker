@@ -4,6 +4,13 @@
 
 First, try to run a process with chroot; If that doesn't work.... perhaps we should extract an image there
 
+If we want tools like `ps` to work properly, we need to mount the special filesystems like `/proc`, `/sys` and `/dev` inside the new root. This can be done using the *linux* python module which exposes the *mount()* syscall:
+
+```python
+linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
+```
+The semantics of the *mount()* syscall have been preserved; to learn more about it read `man 3 mount`.
+
 From within the chroot, have a look at `/proc/mounts`. Does it look different from `/proc/mounts` outside the chroot?
 Remember we are not using mount namespace yet!
 
