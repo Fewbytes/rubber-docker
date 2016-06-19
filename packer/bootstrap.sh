@@ -50,6 +50,7 @@ popd
 # Clone git repo
 pushd /workshop
 git clone https://github.com/Fewbytes/rubber-docker.git
+pip install -r rubber-docker/requirements.txt
 popd
 
 # On boot, pull the repo and build the C extension

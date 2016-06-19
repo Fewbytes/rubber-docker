@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    grep -q `hostname` /etc/hosts || echo 127.0.0.1 `hostname` |sudo tee -a /etc/hosts
     sudo bash /vagrant/packer/bootstrap.sh
     sudo bash /etc/rc.local
   SHELL
