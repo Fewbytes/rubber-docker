@@ -22,6 +22,10 @@ Remember we are not using mount namespace yet!
 
 (*answer*: [linux/fs/proc_namespace.c on Github](https://github.com/torvalds/linux/blob/33caf82acf4dc420bf0f0136b886f7b27ecf90c5/fs/proc_namespace.c#L110))
 
+## Cleaning up
+
+You might notice upon completing this level that you have many unused entries in */proc/mounts* and many unused extracted images in */workshop/containers*. You can use [our cleanup script](../cleanup.sh) to remove them quickly.
+
 ## Relevant Documentation
 
 [chroot manpage](http://linux.die.net/man/2/chroot)
