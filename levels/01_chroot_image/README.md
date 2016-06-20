@@ -2,9 +2,15 @@
 
 "Jail" a process so it doesn't see the rest of the file system.
 
-First, try to run a process with chroot; If that doesn't work.... perhaps we should extract an image there
+To exec a process in a chroot we need a few things:
+1. Choose a new root directory for the process
+  1. with our target binary
+  2. with any other dependency (proc? sys? dev?)
+2. Chroot into it using Python's [os.chroot](https://docs.python.org/2/library/os.html#os.chroot)
 
-If we want tools like `ps` to work properly, we need to mount the special filesystems like `/proc`, `/sys` and `/dev` inside the new root. This can be done using the *linux* python module which exposes the *mount()* syscall:
+To help you get there quickly, we implemented *create_container_root()* which extracts pre-downloaded images (ubuntu OR busybox), and return a path.
+
+If we want tools like `ps` to work properly, we need to mount the special filesystems like `/proc`, `/sys` and `/dev` inside the new root. This can be done using the [linux python module](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) which exposes the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall:
 
 ```python
 linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
@@ -23,34 +29,27 @@ Remember we are not using mount namespace yet!
 ## How to check your work
 
 Without extracting an image:
-```
-$ sudo python rd.py run -i ubuntu-trusty /bin/bash
-Created a new root fs for our container: /workshop/containers/3cfcd2b8-3f45-4531-af8a-62fc85b36755/rootfs
-Traceback (most recent call last):
-  File "rd.py", line 90, in <module>
-    cli()
-  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 700, in __call__
-  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 680, in main
-  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 1027, in invoke
-  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 873, in invoke
-  File "/usr/local/lib/python2.7/dist-packages/click/core.py", line 508, in invoke
-  File "rd.py", line 82, in run
-    contain(command, image_name, image_dir, container_id, container_dir)
-  File "rd.py", line 69, in contain
-    os.execvp(command[0], command)
-  File "/usr/lib/python2.7/os.py", line 346, in execvp
-  File "/usr/lib/python2.7/os.py", line 370, in _execvpe
-OSError: [Errno 2] No such file or directory
-3916 exited with status 256
+```shell
+$ sudo python rd.py run -i ubuntu -- /bin/ls -l /workshop/rubber-docker/levels/
+total 44
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 00_fork_exec
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 01_chroot_image
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 02_mount_ns
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 03_pivot_root
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 04_overlay
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 05_uts_namespace
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 06_pid_namespace
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 07_net_namespace
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 08_cpu_cgroup
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 09_memory_cgorup
+drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 10_setuid
+1620 exited with status 0
 ```
 
 With an extracted image:
 ```shell
-$ sudo python rd.py run -i ubuntu-trusty /bin/bash
-$ ls /
-bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-$ touch /test
-$ exit
-$ ls /test
-ls: cannot access /test: No such file or directory
+$ sudo python rd.py run -i ubuntu -- /bin/ls -l /workshop/rubber-docker/levels/
+Created a new root fs for our container: /workshop/containers/1739af4b-3849-4e88-ae65-dc98264a0e69/rootfs
+/bin/ls: cannot access /workshop/rubber-docker/levels/: No such file or directory
+1656 exited with status 512
 ```
