@@ -1,16 +1,20 @@
 # Level 02: mount namespace
 
-Let's add a mount namespace using the `unshare()` call.
+Let's add a mount namespace using the [unshare()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.unshare) call.
 Mount namespaces essentially work like bind mounts - operations in mount namespaces will be propagated to other namespaces *unless* we make the parent mount (/ in our case) a *private* mount (or similar).
-For this reason, we need to change / to a private mount. This is done using the *mount()* syscall with `MS_PRIVATE` and `MS_REC` flags (why do we need `MS_REC`?)
+For this reason, we need to change / to a private mount. This is done using the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall with `MS_PRIVATE` and `MS_REC` flags (why do we need `MS_REC`?)
 
 Python doesn't have the mount syscall exposed. Use `linux` module provided in this repo instead.
 
-Also, it's time to create device nodes in our container root using `mknod()`:
+**Fun Fact**: The Linux kernel documentation says private mounts are the default, but are they?
+
+Also, it's time to create device nodes in our container root using [mknod()](https://docs.python.org/2/library/os.html#os.mknod):
 
 ```python
 os.mknod(os.path.join(dev_path, device), 0666 | S_IFCHR, os.makedev(major, minor))
 ```
+
+Look at the host's `/dev` and think which devices you might need, note their minor/major (using ls -l), and create them inside the container.
 
 ## Relevant Documentation
 
@@ -57,3 +61,6 @@ root@ip-172-31-31-83:/# find / > /dev/null
 root@ip-172-31-31-83:/# ls -lh /dev/null
 crw-r--r-- 1 root root 1, 3 Jun 21 16:44 /dev/null
 ```
+
+## Cleanup
+Don't forget to remove the containers and mounts using [cleanup.sh](../cleanup.sh)
