@@ -11,7 +11,7 @@ linux.clone(python_callable, flags, callable_args_tuple) # --> returns pid of ne
 
 ## Exercises
 - Try using the PID namespace without the `/proc` mount or mount binding the original `/proc` mount. How do tools like `ps` behave in this case?
-- Try `kill -9 1` from within the container
+- Try `kill -9 $$` from within the container with and without PID namespace ($$ is evaluated to the current PID). Is there a difference? why?
 - Try generating zombies within the container
 
 ## Relevant Documentation
