@@ -6,7 +6,7 @@ In this level, we will add overlayfs. A secondary win is that now we can make `p
 
 What we want to do is extract the image to an *image_root* directory if it's not extracted already, then create a *contaner_dir* with a mount directory for overlayfs, a directory for the writable branch (*upperdir*) and a directory for the *workdir*.
 
-## Excersices
+## Exercises
 
 After implementing this step, try a few things to see how overlayfs behaves:
 - write a file using `dd` inside the container and see if you can fill the host drive

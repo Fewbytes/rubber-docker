@@ -4,7 +4,7 @@ In this level we limit memory usage of the container. Create a directory inside 
 - `memory.limit_in_bytes` - either number of bytes or units e.g. 1g
 - `memory.memsw.limit_in_bytes` - either number of bytes or units e.g. 1g
 
-## Excersices
+## Exercises
 
 After setting the limits, run a container with the stress tool and observe what happens when your container goes over the allotted limit. Explore the behavior of the container when:
 - container goes over `memory.limit_in_bytes`

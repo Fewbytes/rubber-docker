@@ -9,7 +9,7 @@ We then move the contained process to the group by writing its pid to the `tasks
 - [Kernel docs, CPU accounting controller](https://www.kernel.org/doc/Documentation/cgroup-v1/cpuacct.txt)
 
 
-## Excersices
+## Exercises
 - Run a container with 200 cpu shares then generate cpu load inside the container (using the `stress` tool). How much cpu usage does the host show? Why?
 - Run two containers with different shares allocations, generate cpu load in both and observe cpu usage using top on the host
 - How does cgroup limits effect/work with `nice` priorities and priority classes (e.g. RT scheduler)?
