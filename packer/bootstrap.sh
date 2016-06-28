@@ -45,6 +45,7 @@ systemctl daemon-reload
 systemctl restart docker
 
 # Clone git repo
+mkdir /workshop
 pushd /workshop
 git clone https://github.com/Fewbytes/rubber-docker.git
 pip install -r rubber-docker/requirements.txt
