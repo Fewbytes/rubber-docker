@@ -1,5 +1,15 @@
 #!/bin/bash -e
 
+function export_image() {
+  image_name=$1
+  export_name=$2
+  shift; shift
+  CONTAINER_ID=$(docker run -d $image_name "$@")
+  docker wait $CONTAINER_ID
+  docker export -o $export_name.tar $CONTAINER_ID
+  docker rm $CONTAINER_ID
+}
+
 if [ $(id -u) -ne 0 ]; then
     echo "You must run this script as root. Attempting to sudo" 1>&2
     exec sudo -n bash $0 $@
@@ -34,23 +44,21 @@ EOF
 systemctl daemon-reload
 systemctl restart docker
 
-# Fetch images
-mkdir -p /workshop/images
-pushd /workshop/images
-for i in busybox ubuntu; do
-    echo Fetching $i image
-    docker pull $i
-    CONTAINER_ID=$(docker run -d $i /bin/true)
-    docker wait $CONTAINER_ID
-    docker export -o $i.tar $CONTAINER_ID
-    docker rm $CONTAINER_ID
-done
-popd
-
 # Clone git repo
 pushd /workshop
 git clone https://github.com/Fewbytes/rubber-docker.git
 pip install -r rubber-docker/requirements.txt
+popd
+
+# Fetch images
+mkdir -p /workshop/images
+pushd /workshop/images
+export_image ubuntu:trusty ubuntu /bin/bash -c 'apt-get update && apt-get install -y python stress'
+export_image busybox busybox /bin/true
+cp /workshop/rubber-docker/levels/03_pivot_root/breakout.py ./
+chmod +x breakout.py
+tar rf ubuntu.tar breakout.py
+rm breakout.py
 popd
 
 # On boot, pull the repo and build the C extension
