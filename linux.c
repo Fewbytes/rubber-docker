@@ -3,17 +3,16 @@
 #include <sys/syscall.h>
 #include <sys/mount.h>
 #include <sched.h>
-#include <sys/wait.h>	
+#include <sys/wait.h>
 #include <unistd.h>
 
 #define STACK_SIZE 32768
 
 #define LINUX_MODULE_DOC "linux\n"\
                          "=====\n"\
-                         "The linux module is a simple Python c extension, containing syscall wrappers\n"\
-                         "missing from the Python os module. You will need to use these system calls\n"\
-                         "to implement different aspect of process containment during the workshop.\n"\
-                         "\n"
+                         "The linux module is a simple Python c extension, containing syscall wrappers"\
+                         "missing from the Python os module. You will need to use these system calls"\
+                         "to implement different aspect of process containment during the workshop."
 
 #define PIVOT_ROOT_DOC  ".. py:function:: pivot_root(new_root, put_old)\n"\
                         "\n"\
@@ -28,6 +27,7 @@
                         "\n"\
                         "* They must be directories.\n"\
                         "* `new_root` and put_old must not be on the same filesystem as the current root.\n"\
+                        "* `new_root` must be a mountpoint.\n"\
                         "* `put_old` must  be  underneath `new_root`, that is, adding a nonzero number\n"\
                         "  of /.. to the string pointed to by `put_old` must yield the same directory as\n"\
                         "  `new_root`.\n"\
@@ -105,7 +105,7 @@ _umount(PyObject *self, PyObject *args) {
 	} else {
 		Py_INCREF(Py_None);
 		return Py_None;
-	}	
+	}
 }
 
 #define UMOUNT2_DOC  ".. py:function:: umount2(target, flags)\n"\
@@ -135,7 +135,7 @@ _umount2(PyObject *self, PyObject *args) {
 	} else {
 		Py_INCREF(Py_None);
 		return Py_None;
-	}	
+	}
 }
 
 #define UNSHARE_DOC ".. py:function:: unshare(flags)\n"\
@@ -151,8 +151,8 @@ _umount2(PyObject *self, PyObject *args) {
                     "Useful flags:\n"\
                     "\n"\
                     "* ``linux.CLONE_NEWNS`` - Unshare the mount namespace\n"\
-                    "* ``linux.CLONE_NEWUTS`` - Unshare the UTS IPC namespace (hostname, domainname, etc)\n"\
-                    "* ``linux.CLONE_NEWNS`` - Unshare the network namespace\n"\
+                    "* ``linux.CLONE_NEWUTS`` - Unshare the UTS namespace (hostname, domainname, etc)\n"\
+                    "* ``linux.CLONE_NEWNET`` - Unshare the network namespace\n"\
 
 static PyObject *
 _unshare(PyObject *self, PyObject *args) {
@@ -172,7 +172,7 @@ _unshare(PyObject *self, PyObject *args) {
 
 #define SETNS_DOC   ".. py:function:: setns(fd, nstype)\n"\
                     "\n"\
-                    "reassociate thread with a namespace\n"\
+                    "reassociate process with a namespace\n"\
                     "\n"\
                     ":param int fd: file descriptor referring to a namespace to associate with\n"\
                     ":param int nstype: one of the following: ``0`` (Allow any type of namespace to be joined),\n"\
@@ -231,8 +231,8 @@ static int clone_callback(void *args) {
                     "Useful flags:\n"\
                     "\n"\
                     "* ``linux.CLONE_NEWNS`` - Unshare the mount namespace\n"\
-                    "* ``linux.CLONE_NEWUTS`` - Unshare the UTS IPC namespace (hostname, domainname, etc)\n"\
-                    "* ``linux.CLONE_NEWNS`` - Unshare the network namespace\n"\
+                    "* ``linux.CLONE_NEWUTS`` - Unshare the UTS namespace (hostname, domainname, etc)\n"\
+                    "* ``linux.CLONE_NEWNET`` - Unshare the network namespace\n"\
                     "* ``linux.CLONE_NEWPID`` - Unshare the PID namespace\n"\
 
 static PyObject *
@@ -249,7 +249,7 @@ _clone(PyObject *self, PyObject *args) {
 
 	if (!PyCallable_Check(callback)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-        return NULL;	
+        return NULL;
     }
 
     struct py_clone_args call_args;
@@ -266,7 +266,7 @@ _clone(PyObject *self, PyObject *args) {
 
 #define SETHOSTNAME_DOC ".. py:function:: sethostname(hostname)\n"\
                         "\n"\
-                        "set hostname\n"\
+                        "set the system hostname\n"\
                         "\n"\
                         ":param str hostname: new hostname value\n"\
                         ":return: None\n"\
