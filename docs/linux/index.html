@@ -42,9 +42,7 @@
 <span id="docker-from-scratch-workshop"></span><h1>Docker from Scratch workshop<a class="headerlink" href="#module-linux" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="linux">
 <h2>linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
-<p>The linux module is a simple Python c extension, containing syscall wrappers
-missing from the Python os module. You will need to use these system calls
-to implement different aspect of process containment during the workshop.</p>
+<p>The linux module is a simple Python c extension, containing syscall wrappersmissing from the Python os module. You will need to use these system callsto implement different aspect of process containment during the workshop.</p>
 <dl class="function">
 <dt id="linux.clone">
 <code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.clone" title="Permalink to this definition">¶</a></dt>
@@ -77,8 +75,8 @@ between the calling process and the child process. See below.</li>
 <p>Useful flags:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS IPC namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
 <li><code class="docutils literal"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
 </ul>
 </dd></dl>
@@ -148,6 +146,7 @@ or a combination of: <code class="docutils literal"><span class="pre">linux.MS_R
 <ul class="simple">
 <li>They must be directories.</li>
 <li><cite>new_root</cite> and put_old must not be on the same filesystem as the current root.</li>
+<li><cite>new_root</cite> must be a mountpoint.</li>
 <li><cite>put_old</cite> must  be  underneath <cite>new_root</cite>, that is, adding a nonzero number
 of /.. to the string pointed to by <cite>put_old</cite> must yield the same directory as
 <cite>new_root</cite>.</li>
@@ -163,7 +162,7 @@ of /.. to the string pointed to by <cite>put_old</cite> must yield the same dire
 <code class="descclassname">linux.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
 
-<p>set hostname</p>
+<p>set the system hostname</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -186,7 +185,7 @@ of /.. to the string pointed to by <cite>put_old</cite> must yield the same dire
 <code class="descclassname">linux.</code><code class="descname">setns</code><span class="sig-paren">(</span><em>fd</em>, <em>nstype</em><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
 
-<p>reassociate thread with a namespace</p>
+<p>reassociate process with a namespace</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -289,8 +288,8 @@ to use in this workshop</td>
 <p>Useful flags:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS IPC namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
 </ul>
 </dd></dl>
 
