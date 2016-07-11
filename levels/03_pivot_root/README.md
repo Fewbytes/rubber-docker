@@ -21,11 +21,14 @@ ls /
 ```
 
 
-Ok, obviously [chroot()](https://docs.python.org/2/library/os.html#os.chroot) isn't good enough. Let's try using [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) - remember that [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) works on **all** processes - luckily we are using mount namespaces.
+Ok, obviously [chroot()](https://docs.python.org/2/library/os.html#os.chroot) isn't good enough. Let's try using [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root).
+Remember that [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) works on **all** processes - luckily we are using mount namespaces.
 
-Because we are using mount namespace which internally uses mount bind mechanism, by default our (sub)mounts will be seen by the parent mount (and mount namespace). To avoid that we need to mount private the root mount immediately after moving to the new mount namespace - also, this needs to be done *recursively* for all submounts, otherwise we will end up unmounting important things like `/dev/pts` :)
+Because we are using mount namespace which internally uses the mount bind mechanism, by default our (sub)mounts will be visible by the parent mount (and mount namespace).
+To avoid that, we need to mount private the root mount immediately after moving to the new mount namespace - also, this needs to be done *recursively* for all submounts, otherwise we will end up unmounting important things like `/dev/pts` :)
 
-After using [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) we need to [umount2()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.umount2) the `old_root`. We need to use umount2 and not umount because we need to pass certain flags to the call, specifically we need to detach. See `man 2 umount` for details.
+After using [pivot_root()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root), we need to [umount2()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.umount2) the `old_root`.
+We need to use umount2 and not umount because we need to pass certain flags to the call; specifically, we need to detach. See `man 2 umount` for details.
 
 ## Relevant Documentation
 
@@ -60,9 +63,10 @@ RuntimeError: (16, 'Device or resource busy')
 10766 exited with status 256
 ```
 
-The reason this step will fail is that [pivot_root(new_root, put_old)](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) requires *new_root* to be a different filesystem then the old root. This will be resolved in step 04 when we mount a overlay filesystem as *new_root*.
+The reason this step will fail is that [pivot_root(new_root, put_old)](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) requires *new_root* to be a different filesystem then the old root.
+This will be resolved in step 04 when we mount an overlay filesystem as *new_root*.
 
-Alternatively you can copy the image files to a loop or [tmpfs](https://en.wikipedia.org/wiki/Tmpfs) mount.
+Alternatively, you can copy the image files to a loop or [tmpfs](https://en.wikipedia.org/wiki/Tmpfs) mount.
 ```python
 # ...
 os.makedirs(container_root)

@@ -1,10 +1,11 @@
 # Level 06: PID namespace
 
-The PID namespace is a little different from other namespaces: `unshare()` doesn't move the current process to a new namespace, instead only it's future children will be in the new PID namespace. We have 2 options:
-1. Use `unshare()` before we fork
-2. Use `clone()` instead of `fork()` and pass the `CLONE_NEWPID` flag
+The PID namespace is a little different from other namespaces: `unshare()` doesn't move the current process to a new namespace, instead only its future children will be in the new PID namespace.
+We have 2 options:
+ 1. Use `unshare()` before we fork
+ 1. Use `clone()` instead of `fork()` and pass the `CLONE_NEWPID` flag
 
-Our version of `clone()` exposed by the `linux` module mirror the `libc` API (because it's simpler):
+Our version of `clone()` that is exposed by the `linux` module mirrors the `libc` API (because it's simpler):
 ```python
 linux.clone(python_callable, flags, callable_args_tuple) # --> returns pid of new process
 ```
@@ -12,7 +13,7 @@ linux.clone(python_callable, flags, callable_args_tuple) # --> returns pid of ne
 ## Exercises
 - Try using the PID namespace without the `/proc` mount or mount binding the original `/proc` mount. How do tools like `ps` behave in this case?
 - Try `kill -9 $$` from within the container with and without PID namespace ($$ is evaluated to the current PID). Is there a difference? why?
-- Try generating zombies within the container
+- Try generating zombies within the container.
 
 ## Relevant Documentation
 

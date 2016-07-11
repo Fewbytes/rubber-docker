@@ -1,18 +1,21 @@
 # Level 09: Memory CGroup
 
-In this level we limit memory usage of the container. Create a directory inside the memory cgroup fs (like we did in the cpu cgroup) per container. Move the process to the cgroup by writing the pid to the `tasks` file then setup the limits by writing to the following files:
+In this level we limit the memory usage of the container.
+Create a directory inside the memory cgroup fs (like we did in the cpu cgroup) per container.
+Move the process to the cgroup by writing the pid to the `tasks` file and then setup the limits by writing to the following files:
 - `memory.limit_in_bytes` - either number of bytes or units e.g. 1g
 - `memory.memsw.limit_in_bytes` - either number of bytes or units e.g. 1g
 
 ## Exercises
 
-After setting the limits, run a container with the stress tool and observe what happens when your container goes over the allotted limit. Explore the behavior of the container when:
-- container goes over `memory.limit_in_bytes`
-- container goes over `memory.memsw.limit_in_bytes`
-- watch `memory.kmem.usage_in_bytes`, is all kernel memory used accounted for?
-- try the infamous `while true; do mkdir t; cd t; done` DOS attack from within the container. Does it succeed in DOSing the host?
+After setting the limits, run a container with the stress tool and observe what happens when your container goes over the allotted limit.
+Explore the behavior of the container:
+- Watch when the container goes over `memory.limit_in_bytes`.
+- Watch when the container goes over `memory.memsw.limit_in_bytes.`
+- Watch `memory.kmem.usage_in_bytes`, is all kernel memory used accounted for?
+- Try the infamous `while true; do mkdir t; cd t; done` DOS attack from within the container. Does it succeed in DOSing the host?
 - Where is `tcp` socket buffers memory accounted? where is `udp` memory accounted?
-- Explore the behavior of memory cgroup with different OOM control options. (`memory.oom_control` file)
+- Explore the behavior of memory cgroup with different OOM control options. (`memory.oom_control` file).
 
 ## Relevant Documentation
 - [Kernel docs, memory cgroup](https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt)
@@ -45,7 +48,7 @@ $ cat /sys/fs/cgroup/memory/rubber_docker/1e9b16b3-3ea3-4cad-84e1-f623ba4deada/m
 ```
 
 ## Bonus round
-read about and use the following control files
+read about and use the following control files:
 - `memory.oom_control`
 - `memory.swappiness`
 - `memory.kmem.limit_in_bytes`
