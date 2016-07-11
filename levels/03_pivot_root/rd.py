@@ -1,14 +1,15 @@
 #!/usr/bin/env python2.7
-#
-# Docker From Scratch Workshop
-# Level 3 - switching from chroot to pivot_root
-#
-# Goal: Use pivot_root instead of chroot, and umount old_root
-#       i.e. running:
-#                rd.py run -i ubuntu /bin/sh
-#            will:
-#               fork a new process in a new mount namespace with a new root, make sure that you can't easily escape
-#
+"""Docker From Scratch Workshop - Level 3: Switching from chroot to pivot_root.
+
+Goal: Use pivot_root instead of chroot, and umount old_root.
+
+Usage:
+    running:
+        rd.py run -i ubuntu /bin/sh
+    will:
+        - fork a new process in a new mount namespace with a new root
+        - make sure that you can't easily escape
+"""
 
 from __future__ import print_function
 
@@ -41,8 +42,9 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
 
     with tarfile.open(image_path) as t:
         # Fun fact: tar files may contain *nix devices! *facepalm*
-        t.extractall(container_root,
-                     members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
+        members = [m for m in t.getmembers()
+                   if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)]
+        t.extractall(image_root, members=members)
 
     return container_root
 
@@ -62,15 +64,18 @@ def makedev(dev_path):
                'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_IFCHR, 5, 0),
                'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
-        os.mknod(os.path.join(dev_path, device), 0666 | dev_type, os.makedev(major, minor))
+        os.mknod(os.path.join(dev_path, device),
+                 0666 | dev_type, os.makedev(major, minor))
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
     linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
 
-    linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)  # TODO: we added MS_REC here. wanna guess why?
+    # TODO: we added MS_REC here. wanna guess why?
+    linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)
 
-    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
+    new_root = create_container_root(
+        image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
     # Create mounts (/proc, /sys, /dev) under new_root
@@ -98,8 +103,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
 @cli.command()
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
-@click.option('--image-dir', help='Images directory', default='/workshop/images')
-@click.option('--container-dir', help='Containers directory', default='/workshop/containers')
+@click.option('--image-dir', help='Images directory',
+              default='/workshop/images')
+@click.option('--container-dir', help='Containers directory',
+              default='/workshop/containers')
 @click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
@@ -108,13 +115,15 @@ def run(image_name, image_dir, container_dir, command):
     if pid == 0:
         # This is the child, we'll try to do some containment here
         try:
-            contain(command, image_name, image_dir, container_id, container_dir)
+            contain(command, image_name, image_dir, container_id,
+                    container_dir)
         except Exception:
             traceback.print_exc()
             os._exit(1)  # something went wrong in contain()
 
     # This is the parent, pid contains the PID of the forked process
-    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    # wait for the forked child, fetch the exit status
+    _, status = os.waitpid(pid, 0)
     print('{} exited with status {}'.format(pid, status))
 
 
