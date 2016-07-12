@@ -1,11 +1,8 @@
 #!/usr/bin/env python2.7
-#
-# Docker From Scratch Workshop
-# Level 8 - add CPU Control group
-#
-# Goal: prevent your container from starving host processes CPU time
-#
+"""Docker From Scratch Workshop - Level 8: Add CPU Control group.
 
+Goal: prevent your container from starving host processes CPU time.
+"""
 
 from __future__ import print_function
 
@@ -36,24 +33,29 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
         os.makedirs(image_root)
         with tarfile.open(image_path) as t:
             # Fun fact: tar files may contain *nix devices! *facepalm*
-            t.extractall(image_root,
-                         members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
+            members = [m for m in t.getmembers()
+                       if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)]
+            t.extractall(image_root, members=members)
 
-    # create directories for copy-on-write (uppperdir), overlay workdir, and a mount point
-    container_cow_rw = _get_container_path(container_id, container_dir, 'cow_rw')
-    container_cow_workdir = _get_container_path(container_id, container_dir, 'cow_workdir')
-    container_rootfs = _get_container_path(container_id, container_dir, 'rootfs')
+    # Create directories for copy-on-write (uppperdir), overlay workdir,
+    # and a mount point
+    container_cow_rw = _get_container_path(
+        container_id, container_dir, 'cow_rw')
+    container_cow_workdir = _get_container_path(
+        container_id, container_dir, 'cow_workdir')
+    container_rootfs = _get_container_path(
+        container_id, container_dir, 'rootfs')
     for d in (container_cow_rw, container_cow_workdir, container_rootfs):
         if not os.path.exists(d):
             os.makedirs(d)
 
-            # mount the overlay (HINT: use the MS_NODEV flag to mount)
-    linux.mount('overlay', container_rootfs, 'overlay',
-                linux.MS_NODEV,
-                "lowerdir={image_root},upperdir={cow_rw},workdir={cow_workdir}".format(
-                    image_root=image_root,
-                    cow_rw=container_cow_rw,
-                    cow_workdir=container_cow_workdir))
+    # Mount the overlay (HINT: use the MS_NODEV flag to mount)
+    linux.mount(
+        'overlay', container_rootfs, 'overlay', linux.MS_NODEV,
+        "lowerdir={image_root},upperdir={cow_rw},workdir={cow_workdir}".format(
+            image_root=image_root,
+            cow_rw=container_cow_rw,
+            cow_workdir=container_cow_workdir))
 
     return container_rootfs  # return the mountpoint for the overlayfs
 
@@ -73,7 +75,8 @@ def makedev(dev_path):
                'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_IFCHR, 5, 0),
                'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
-        os.mknod(os.path.join(dev_path, device), 0666 | dev_type, os.makedev(major, minor))
+        os.mknod(os.path.join(dev_path, device),
+                 0666 | dev_type, os.makedev(major, minor))
 
 
 def _create_mounts(new_root):
@@ -92,8 +95,10 @@ def _create_mounts(new_root):
     makedev(os.path.join(new_root, 'dev'))
 
 
-def contain(command, image_name, image_dir, container_id, container_dir, cpu_shares):
-    # TODO: insert the container to a new cpu cgroup named 'rubber_docker/container_id'
+def contain(command, image_name, image_dir, container_id, container_dir,
+            cpu_shares):
+    # TODO: insert the container to a new cpu cgroup named:
+    #       'rubber_docker/container_id'
 
     # TODO: if (cpu_shares != 0)  => set the 'cpu.shares' in our cpu cgroup
 
@@ -101,7 +106,8 @@ def contain(command, image_name, image_dir, container_id, container_dir, cpu_sha
 
     linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)
 
-    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
+    new_root = create_container_root(
+        image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
     _create_mounts(new_root)
@@ -121,19 +127,25 @@ def contain(command, image_name, image_dir, container_id, container_dir, cpu_sha
 @cli.command()
 @click.option('--cpu-shares', help='CPU shares (relative weight)', default=0)
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
-@click.option('--image-dir', help='Images directory', default='/workshop/images')
-@click.option('--container-dir', help='Containers directory', default='/workshop/containers')
+@click.option('--image-dir', help='Images directory',
+              default='/workshop/images')
+@click.option('--container-dir', help='Containers directory',
+              default='/workshop/containers')
 @click.argument('Command', required=True, nargs=-1)
 def run(cpu_shares, image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
 
-    # linux.clone(callback, flags, callback_args) modeled after the Glibc version. see: "man 2 clone"
-    pid = linux.clone(contain,
-                      linux.CLONE_NEWPID | linux.CLONE_NEWNS | linux.CLONE_NEWUTS | linux.CLONE_NEWNET,
-                      (command, image_name, image_dir, container_id, container_dir, cpu_shares))
+    # linux.clone(callback, flags, callback_args) is modeled after the Glibc
+    # version. see: "man 2 clone"
+    flags = (linux.CLONE_NEWPID | linux.CLONE_NEWNS | linux.CLONE_NEWUTS |
+             linux.CLONE_NEWNET)
+    callback_args = (command, image_name, image_dir, container_id,
+                     container_dir, cpu_shares)
+    pid = linux.clone(contain, flags, callback_args)
 
     # This is the parent, pid contains the PID of the forked process
-    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    # wait for the forked child, fetch the exit status
+    _, status = os.waitpid(pid, 0)
     print('{} exited with status {}'.format(pid, status))
 
 

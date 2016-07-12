@@ -1,13 +1,14 @@
 #!/usr/bin/env python2.7
-#
-# Docker From Scratch Workshop
-# Level 4 - add overlay FS
-#
-# Goal: Instead of re-extracting the image, use it as a read-only layer (lowerdir),
-#         and create a copy-on-write layer for changes (upperdir).
-#       HINT: Don't forget that overlay fs also requires a workdir
-#
-#   Read more on overlay FS here: https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt
+"""Docker From Scratch Workshop - Level 4: Add overlay FS.
+
+Goal: Instead of re-extracting the image, use it as a read-only layer
+      (lowerdir), and create a copy-on-write layer for changes (upperdir).
+
+HINT: Don't forget that overlay fs also requires a workdir.
+
+Read more on overlay FS here:
+https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt
+"""
 
 from __future__ import print_function
 
@@ -33,7 +34,8 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
     image_path = _get_image_path(image_name, image_dir)
     assert os.path.exists(image_path), "unable to locate image %s" % image_name
 
-    # TODO: Instead of creating the container_root and extracting to it, create an images_root
+    # TODO: Instead of creating the container_root and extracting to it,
+    #       create an images_root.
     # keep only one rootfs per image and re-use it
     container_root = _get_container_path(container_id, container_dir, 'rootfs')
 
@@ -41,10 +43,12 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
         os.makedirs(container_root)
         with tarfile.open(image_path) as t:
             # Fun fact: tar files may contain *nix devices! *facepalm*
-            t.extractall(container_root,
-                         members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
+            members = [m for m in t.getmembers()
+                       if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)]
+            t.extractall(image_root, members=members)
 
-    # TODO: create directories for copy-on-write (uppperdir), overlay workdir, and a mount point
+    # TODO: create directories for copy-on-write (uppperdir), overlay workdir,
+    #       and a mount point
 
     # TODO: mount the overlay (HINT: use the MS_NODEV flag to mount)
 
@@ -66,7 +70,8 @@ def makedev(dev_path):
                'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_IFCHR, 5, 0),
                'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
-        os.mknod(os.path.join(dev_path, device), 0666 | dev_type, os.makedev(major, minor))
+        os.mknod(os.path.join(dev_path, device),
+                 0666 | dev_type, os.makedev(major, minor))
 
 
 def _create_mounts(new_root):
@@ -90,7 +95,8 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
     linux.mount(None, '/', None, linux.MS_PRIVATE | linux.MS_REC, None)
 
-    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
+    new_root = create_container_root(
+        image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
     _create_mounts(new_root)
@@ -108,8 +114,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
 @cli.command()
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
-@click.option('--image-dir', help='Images directory', default='/workshop/images')
-@click.option('--container-dir', help='Containers directory', default='/workshop/containers')
+@click.option('--image-dir', help='Images directory',
+              default='/workshop/images')
+@click.option('--container-dir', help='Containers directory',
+              default='/workshop/containers')
 @click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
@@ -118,13 +126,15 @@ def run(image_name, image_dir, container_dir, command):
     if pid == 0:
         # This is the child, we'll try to do some containment here
         try:
-            contain(command, image_name, image_dir, container_id, container_dir)
+            contain(command, image_name, image_dir, container_id,
+                    container_dir)
         except Exception:
             traceback.print_exc()
             os._exit(1)  # something went wrong in contain()
 
     # This is the parent, pid contains the PID of the forked process
-    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    # wait for the forked child, fetch the exit status
+    _, status = os.waitpid(pid, 0)
     print('{} exited with status {}'.format(pid, status))
 
 

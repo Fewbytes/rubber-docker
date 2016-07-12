@@ -1,14 +1,14 @@
 #!/usr/bin/env python2.7
-#
-# Docker From Scratch Workshop
-# Level 2 - adding mount namespace
-#
-# Goal: separate our mount table from the other processes
-#       i.e. running:
-#                rd.py run -i ubuntu /bin/sh
-#            will:
-#               fork a new chrooted process in a new mount namespace
-#
+"""Docker From Scratch Workshop - Level 2: Adding mount namespace.
+
+Goal: Separate our mount table from the other processes.
+
+Usage:
+    running:
+        rd.py run -i ubuntu /bin/sh
+    will:
+        - fork a new chrooted process in a new mount namespace
+"""
 
 from __future__ import print_function
 
@@ -40,8 +40,9 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
 
     with tarfile.open(image_path) as t:
         # Fun fact: tar files may contain *nix devices! *facepalm*
-        t.extractall(container_root,
-                     members=[m for m in t.getmembers() if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)])
+        members = [m for m in t.getmembers()
+                   if m.type not in (tarfile.CHRTYPE, tarfile.BLKTYPE)]
+        t.extractall(image_root, members=members)
 
     return container_root
 
@@ -52,15 +53,20 @@ def cli():
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
-    new_root = create_container_root(image_name, image_dir, container_id, container_dir)
+    new_root = create_container_root(
+        image_name, image_dir, container_id, container_dir)
     print('Created a new root fs for our container: {}'.format(new_root))
 
-    # TODO: time to say goodbye to the old mount namespace, see "man 2 unshare" to get some help
-    #   HINT 1: there is no os.unshare(), time to use the linux module we made just for you!
-    #   HINT 2: the linux module include both functions and constants! e.g. linux.CLONE_NEWNS
+    # TODO: time to say goodbye to the old mount namespace,
+    #       see "man 2 unshare" to get some help
+    #   HINT 1: there is no os.unshare(), time to use the linux module we made
+    #           just for you!
+    #   HINT 2: the linux module includes both functions and constants!
+    #           e.g. linux.CLONE_NEWNS
 
-    # TODO: remember shared subtrees? (https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
-    #       make / a private mount to avoid littering our host mount table
+    # TODO: remember shared subtrees?
+    # (https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
+    # Make / a private mount to avoid littering our host mount table.
 
     # Create mounts (/proc, /sys, /dev) under new_root
     linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
@@ -75,7 +81,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     for i, dev in enumerate(['stdin', 'stdout', 'stderr']):
         os.symlink('/proc/self/fd/%d' % i, os.path.join(new_root, 'dev', dev))
 
-    # TODO: add more device (e.g. null, zero, random, urandom) using os.mknode
+    # TODO: add more devices (e.g. null, zero, random, urandom) using os.mknod.
 
     os.chroot(new_root)
 
@@ -86,8 +92,10 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
 @cli.command()
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
-@click.option('--image-dir', help='Images directory', default='/workshop/images')
-@click.option('--container-dir', help='Containers directory', default='/workshop/containers')
+@click.option('--image-dir', help='Images directory',
+              default='/workshop/images')
+@click.option('--container-dir', help='Containers directory',
+              default='/workshop/containers')
 @click.argument('Command', required=True, nargs=-1)
 def run(image_name, image_dir, container_dir, command):
     container_id = str(uuid.uuid4())
@@ -102,7 +110,8 @@ def run(image_name, image_dir, container_dir, command):
             os._exit(1)  # something went wrong in contain()
 
     # This is the parent, pid contains the PID of the forked process
-    _, status = os.waitpid(pid, 0)  # wait for the forked child, fetch the exit status
+    # wait for the forked child, fetch the exit status
+    _, status = os.waitpid(pid, 0)
     print('{} exited with status {}'.format(pid, status))
 
 
