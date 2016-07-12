@@ -1,12 +1,14 @@
 # Level 05: UTS namespace
 
-The UTS namespace allows per container hostname. After moving to a new UTS namespace you can change the hostname without effecting the hostname of the machine.
+The UTS namespace allows per-container hostnames.
+After moving to a new UTS namespace, you can change the hostname without affecting the hostname of the machine.
 
 Use the [sethostname()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.sethostname) call provided by our `linux` module.
 
 ## How to check your work
 
-Hostname within the container should be different from outside. Specifically, we want the hostname to be the container ID.
+The hostname within the container should be different from that outside.
+Specifically, we want the hostname to be the container ID.
 
 ```
 $ sudo python rd.py run -i ubuntu /bin/bash -- -c hostname

@@ -2,9 +2,10 @@
 
 Let's add a mount namespace using the [unshare()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.unshare) call.
 Mount namespaces essentially work like bind mounts - operations in mount namespaces will be propagated to other namespaces *unless* we make the parent mount (/ in our case) a *private* mount (or similar).
-For this reason, we need to change / to a private mount. This is done using the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall with `MS_PRIVATE` and `MS_REC` flags (why do we need `MS_REC`?)
+For this reason, we need to change / to a private mount.
+This is done using the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall with `MS_PRIVATE` and `MS_REC` flags (why do we need `MS_REC`?)
 
-Python doesn't have the mount syscall exposed. Use `linux` module provided in this repo instead.
+Python doesn't have the mount syscall exposed; use the `linux` module provided in this repo instead.
 
 **Fun Fact**: The Linux kernel documentation says private mounts are the default, but are they?
 
@@ -30,13 +31,13 @@ Verify your new forked process is in a different mount namespace
 $ ls -lh /proc/self/ns/mnt
 lrwxrwxrwx 1 root root 0 Mar 18 04:13 /proc/self/ns/mnt -> mnt:[4026531840]
 $ sudo python rd.py run -i ubuntu /bin/bash
-$ ls -lh /proc/self/ns/mnt
+root@ip-172-31-31-83:/# ls -lh /proc/self/ns/mnt
 lrwxrwxrwx 1 root root 0 Mar 18 04:13 /proc/self/ns/mnt -> mnt:[4026532139]
 ```
 
 Create a new mount inside the container, and make sure it's invisible from the outside
 ```bash
-$ sudo python /rd.py run -i ubuntu /bin/bash
+$ sudo python rd.py run -i ubuntu /bin/bash
 root@ip-172-31-31-83:/# mkdir /mnt/moo
 root@ip-172-31-31-83:/# mount -t tmpfs tmpfs /mnt/moo
 

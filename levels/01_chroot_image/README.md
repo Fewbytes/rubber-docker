@@ -3,14 +3,15 @@
 "Jail" a process so it doesn't see the rest of the file system.
 
 To exec a process in a chroot we need a few things:
-1. Choose a new root directory for the process
-  1. with our target binary
-  2. with any other dependency (proc? sys? dev?)
-2. Chroot into it using Python's [os.chroot](https://docs.python.org/2/library/os.html#os.chroot)
+ 1. Choose a new root directory for the process
+   1. with our target binary
+   1. with any other dependency (proc? sys? dev?)
+ 1. Chroot into it using Python's [os.chroot](https://docs.python.org/2/library/os.html#os.chroot)
 
-To help you get there quickly, we implemented *create_container_root()* which extracts pre-downloaded images (ubuntu OR busybox), and return a path.
+To help you get there quickly, we implemented *create_container_root()* which extracts pre-downloaded images (ubuntu OR busybox), and returns a path.
 
-If we want tools like `ps` to work properly, we need to mount the special filesystems like `/proc`, `/sys` and `/dev` inside the new root. This can be done using the [linux python module](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) which exposes the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall:
+If we want tools like `ps` to work properly, we need to mount the special filesystems like `/proc`, `/sys` and `/dev` inside the new root.
+This can be done using the [linux python module](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) which exposes the [mount()](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.mount) syscall:
 
 ```python
 linux.mount('proc', os.path.join(new_root, 'proc'), 'proc', 0, '')
