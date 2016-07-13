@@ -96,7 +96,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
 
     os.chdir('/')
 
-    # TODO: umount2 old root (HINT: see MNT_DETACH in man mount)
+    # TODO: umount2 old root (HINT: see MNT_DETACH in man 2 umount)
 
     os.execvp(command[0], command)
 
