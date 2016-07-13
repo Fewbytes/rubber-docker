@@ -25,7 +25,7 @@ Have a look at the [module documentation](https://rawgit.com/Fewbytes/rubber-doc
 ## Quickstart
 There are currently 3 options to start the workshop by yourself:
  1. We created a public AMI with the required configuration and utilities
-    already installed: ami-8faab0e3 (eu-west-1).
+    already installed: ami-8faab0e3 (eu-central-1).
  1. We provide a [packer template](https://www.packer.io/) so you can create
     your own AMI.
  1. We have a [Vagrantfile](https://www.vagrantup.com/) for you to run using
