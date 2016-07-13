@@ -7,7 +7,7 @@ In this level, we will add overlayfs.
 A secondary win is that now we can make `pivot_root()` work since our new root will be a mountpoint!
 
 What we want to do is extract the image to an *image_root* directory (if it's not extracted already), and then create the following:
-- a *contaner_dir* with a mount directory for overlayfs
+- a *container_dir* with a mount directory for overlayfs
 - a directory for the writable branch (*upperdir*)
 - a directory for the *workdir*
 
