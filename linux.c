@@ -10,8 +10,8 @@
 
 #define LINUX_MODULE_DOC "linux\n"\
                          "=====\n"\
-                         "The linux module is a simple Python c extension, containing syscall wrappers"\
-                         "missing from the Python os module. You will need to use these system calls"\
+                         "The linux module is a simple Python c extension, containing syscall wrappers "\
+                         "missing from the Python os module. You will need to use these system calls "\
                          "to implement different aspect of process containment during the workshop."
 
 #define PIVOT_ROOT_DOC  ".. py:function:: pivot_root(new_root, put_old)\n"\
