@@ -23,7 +23,7 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E8
 echo "deb https://apt.dockerproject.org/repo ubuntu-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/docker.list
 apt-get update
 apt-get -y install linux-image-extra-$(uname -r)
-apt-get -y install docker-engine stress python-dev build-essential htop ipython python-pip
+apt-get -y install docker-engine stress python-dev build-essential htop ipython python-pip git
 # for vim YouCompleteMe
 apt-get -y install vim-youcompleteme
 
