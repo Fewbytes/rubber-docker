@@ -220,10 +220,10 @@ static int clone_callback(void *args) {
                     "\n"\
                     "create a child process\n"\
                     "\n"\
-                    ":param str callback: python function to be executed by the forked child\n"\
+                    ":param Callable callback: python function to be executed by the forked child\n"\
                     ":param int flags: combination (using ``|``) of flags specifying what should be shared\n"\
                     "                  between the calling process and the child process. See below.\n"\
-                    ":param str callback_args: tuple of arguments for the callback function\n"\
+                    ":param tuple callback_args: tuple of arguments for the callback function\n"\
                     ":return: On success, the thread ID of the child process\n"\
                     ":raises RuntimeError: if clone fails\n"\
                     "\n"\

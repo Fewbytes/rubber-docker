@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Docker from Scratch workshop &mdash; Rubber Docker 0.1 documentation</title>
+    <title>Docker from Scratch workshop &#8212; Rubber Docker 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,15 +17,18 @@
         VERSION:     '0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rubber Docker 0.1 documentation" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -42,7 +45,7 @@
 <span id="docker-from-scratch-workshop"></span><h1>Docker from Scratch workshop<a class="headerlink" href="#module-linux" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="linux">
 <h2>linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
-<p>The linux module is a simple Python c extension, containing syscall wrappersmissing from the Python os module. You will need to use these system callsto implement different aspect of process containment during the workshop.</p>
+<p>The linux module is a simple Python c extension, containing syscall wrappers missing from the Python os module. You will need to use these system calls to implement different aspect of process containment during the workshop.</p>
 <dl class="function">
 <dt id="linux.clone">
 <code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.clone" title="Permalink to this definition">¶</a></dt>
@@ -57,10 +60,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callback</strong> (<em>str</em>) &#8211; python function to be executed by the forked child</li>
+<li><strong>callback</strong> (<em>Callable</em>) &#8211; python function to be executed by the forked child</li>
 <li><strong>flags</strong> (<em>int</em>) &#8211; combination (using <code class="docutils literal"><span class="pre">|</span></code>) of flags specifying what should be shared
 between the calling process and the child process. See below.</li>
-<li><strong>callback_args</strong> (<em>str</em>) &#8211; tuple of arguments for the callback function</li>
+<li><strong>callback_args</strong> (<em>tuple</em>) &#8211; tuple of arguments for the callback function</li>
 </ul>
 </td>
 </tr>
@@ -319,7 +322,7 @@ to use in this workshop</td>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -341,11 +344,11 @@ to use in this workshop</td>
       &copy;2016, Avishai Ish-Shalom, Nati Cohen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
