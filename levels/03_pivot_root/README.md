@@ -5,11 +5,6 @@ After successfully jailing a process with [chroot()](https://docs.python.org/2/l
 ```bash
 sudo python rd.py run -i ubuntu /bin/bash
 
-# Get breakout.py
-echo nameserver 8.8.8.8 > /etc/resolv.conf
-apt-get update && apt-get install -y python wget
-wget https://raw.githubusercontent.com/Fewbytes/rubber-docker/master/levels/03_pivot_root/breakout.py
-
 # Check that you are inside chroot
 ls /
 

@@ -54,12 +54,13 @@ popd
 # Fetch images
 mkdir -p /workshop/images
 pushd /workshop/images
-export_image ubuntu:trusty ubuntu /bin/bash -c 'apt-get update && apt-get install -y python stress'
+export_image ubuntu:trusty ubuntu-export /bin/bash -c 'apt-get update && apt-get install -y python stress'
 export_image busybox busybox /bin/true
 cp /workshop/rubber-docker/levels/03_pivot_root/breakout.py ./
 chmod +x breakout.py
-tar rf ubuntu.tar breakout.py
-rm breakout.py
+tar cf ubuntu.tar breakout.py
+tar Af ubuntu.tar ubuntu-export.tar
+rm breakout.py ubuntu-export.tar
 popd
 
 # On boot, pull the repo and build the C extension
