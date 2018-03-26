@@ -19,7 +19,7 @@ Look at the host's `/dev` and think which devices you might need, note their min
 
 ## Relevant Documentation
 
-- [man 2 mount](http://linux.die.net/man/2/mount)
+- [man 2 mount](http://man7.org/linux/man-pages/man2/mount.2.html)
 - [Kernel docs - shared mounts](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
 - [man 7 namespaces](http://man7.org/linux/man-pages/man7/namespaces.7.html)
 
