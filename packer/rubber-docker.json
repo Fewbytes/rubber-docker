@@ -24,6 +24,11 @@
 	    }
     ],
     "provisioners": [
+		{
+			"type": "file",
+			"source": "vimrc",
+			"destination": "/tmp/vimrc"
+		},
     	{
     		"type": "shell",
     		"script": "bootstrap.sh"

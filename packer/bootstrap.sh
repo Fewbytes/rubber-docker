@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 function export_image() {
   image_name=$1
@@ -12,18 +13,20 @@ function export_image() {
 
 if [ $(id -u) -ne 0 ]; then
     echo "You must run this script as root. Attempting to sudo" 1>&2
-    exec sudo -n bash $0 $@
+    exec sudo -H -n bash $0 $@
 fi
 
 # Wait for cloud-init
 sleep 10
 
 # Install packages
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-echo "deb https://apt.dockerproject.org/repo ubuntu-$(lsb_release -c -s) main" > /etc/apt/sources.list.d/docker.list
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 0EBFCD88
 apt-get update
-apt-get -y install linux-image-extra-$(uname -r)
-apt-get -y install docker-engine stress python-dev build-essential htop ipython python-pip git
+apt-get -y install docker-ce stress python-dev build-essential cmake htop ipython python-pip git
 
 # Include the memory and memsw cgroups
 sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
@@ -31,16 +34,15 @@ sed -i -r 's|GRUB_CMDLINE_LINUX="(.*)"|GRUB_CMDLINE_LINUX="\1 cgroup_enable=memo
 update-grub
 
 # Configure Docker to use overlayfs
-[[ -d /etc/systemd/system/docker.service.d ]] || mkdir /etc/systemd/system/docker.service.d
-cat - >/etc/systemd/system/docker.service.d/overlay.conf <<EOF
-[Service]
-ExecStart=
-ExecStart=/usr/bin/docker daemon -H fd:// --storage-driver overlay
+cat - > /etc/docker/daemon.json <<'EOF'
+{
+  "storage-driver": "overlay2"
+}
 EOF
-
 # restart docker (to use overlay)
-systemctl daemon-reload
 systemctl restart docker
+
+usermod -G docker -a ubuntu
 
 # Clone git repo
 mkdir /workshop
@@ -91,8 +93,10 @@ Don't forget to have fun and break things :)
 EOF
 
 # setup vim
-cat | sudo -u ubuntu tee ~ubuntu/.vimrc <<'EOF'
-set bg=dark
-syntax on
-filetype indent plugin on
-EOF
+sudo -H -u ubuntu bash <<'EOS'
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+cp /tmp/vimrc ~/.vimrc
+vim +PluginInstall +qall
+cd ~/.vim/bundle/YouCompleteMe
+./install.py
+EOS
