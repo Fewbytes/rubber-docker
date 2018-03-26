@@ -14,6 +14,8 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/lib/js/head.min.js"></script>
+
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/reveal.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/theme/black.css" id="theme">
 
@@ -28,6 +30,12 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/print/pdf.css' : 'https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+		<style>
+			.reveal pre {
+				box-shadow: none;
+			}
+		</style>
 
 		<!--[if lt IE 9]>
 		<script src="reveal.js/reveal.js/lib/js/html5shiv.js"></script>
@@ -72,6 +80,18 @@
 				<section>
 					<section>
 						<h1>Let's build!</h1>
+						<div>
+							<p>Workshop material is in <code>/workshop</code></p>
+							<p>
+								<pre>
+									<code data-trim data-noescape>cd /workshop/rubber-docker/levels/00_fork_exec</code>
+								</pre>
+								try to run <code>rd.py</code>
+								<pre>
+									<code data-trim data-noescape>python rd.py run /bin/echo "Hello Docker"</code>
+								</pre>
+							</p>
+						</div>
 					</section>
 					<section>
 						<h2><span style="text-transform: none;"><i>fork</i> &amp; <i>exec</i></span> a process</h2>
@@ -194,7 +214,6 @@
 
 		</div>
 
-		<script src="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/lib/js/head.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/reveal.js@3.6.0/js/reveal.min.js"></script>
 
 		<script>
