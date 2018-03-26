@@ -16,7 +16,7 @@ What we want to do is extract the image to an *image_root* directory (if it's no
 After implementing this step, try a few things to see how overlayfs behaves:
 - write a file using `dd` inside the container and see if you can fill the host drive.
 - write a large file (say 1GB) to the image directory, then open it for (non-truncating) writing in the container, perhaps using this python code: `open('big_file', 'r+')`. How much time does the open operation take? why?
-- Do some file operations (write files, move files, delete files) in the container then have a look at the `upperdir` (using `ls -la`).
+- Do some file operations (write files, move files, delete files) in the container, then have a look at the `upperdir` (using `ls -la`).
 
 ## Relevant Documentation
 
