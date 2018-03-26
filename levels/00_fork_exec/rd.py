@@ -34,7 +34,7 @@ def contain(command):
     os._exit(0)  # TODO: remove this after adding exec
 
 
-@cli.command()
+@cli.command(context_settings=dict(ignore_unknown_options=True,))
 @click.argument('Command', required=True, nargs=-1)
 def run(command):
     # TODO: replace this with fork()

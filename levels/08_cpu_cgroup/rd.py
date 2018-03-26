@@ -124,7 +124,7 @@ def contain(command, image_name, image_dir, container_id, container_dir,
     os.execvp(command[0], command)
 
 
-@cli.command()
+@cli.command(context_settings=dict(ignore_unknown_options=True,))
 @click.option('--cpu-shares', help='CPU shares (relative weight)', default=0)
 @click.option('--image-name', '-i', help='Image name', default='ubuntu')
 @click.option('--image-dir', help='Images directory',

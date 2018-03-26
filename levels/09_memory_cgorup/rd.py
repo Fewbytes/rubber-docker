@@ -141,7 +141,7 @@ def contain(command, image_name, image_dir, container_id, container_dir,
     os.execvp(command[0], command)
 
 
-@cli.command()
+@cli.command(context_settings=dict(ignore_unknown_options=True,))
 @click.option('--memory',
               help='Memory limit in bytes.'
               ' Use suffixes to represent larger units (k, m, g)',
