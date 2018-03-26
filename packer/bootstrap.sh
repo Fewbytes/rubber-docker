@@ -93,10 +93,12 @@ Don't forget to have fun and break things :)
 EOF
 
 # setup vim
-sudo -H -u ubuntu bash <<'EOS'
+sudo -H -u ubuntu bash -e <<'EOS'
+cd ~
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp /tmp/vimrc ~/.vimrc
-vim +PluginInstall +qall
-cd ~/.vim/bundle/YouCompleteMe
-./install.py
+echo "Installing plugins using Vundle"
+echo | echo | vim +PluginInstall +qall &>/dev/null
+echo "Vundle done"
+python ~/.vim/bundle/YouCompleteMe/install.py 
 EOS
