@@ -26,6 +26,9 @@ Remember we are not using mount namespace yet!
 ## Cleaning up
 
 You might notice upon completing this level that you have many unused entries in */proc/mounts* and many unused extracted images in */workshop/containers*. You can use [our cleanup script](../cleanup.sh) to remove them quickly.
+```bash
+/workshop/rubber-docker/levels/cleanup.sh
+```
 
 ## Relevant Documentation
 
