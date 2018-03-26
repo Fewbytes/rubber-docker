@@ -40,6 +40,9 @@ def create_container_root(image_name, image_dir, container_id, container_dir):
     if not os.path.exists(container_root):
         os.makedirs(container_root)
 
+    # TODO: uncomment (why?)
+    # linux.mount('tmpfs', container_root, 'tmpfs', 0, None)
+
     with tarfile.open(image_path) as t:
         # Fun fact: tar files may contain *nix devices! *facepalm*
         members = [m for m in t.getmembers()

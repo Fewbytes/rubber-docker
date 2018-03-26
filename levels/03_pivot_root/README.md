@@ -61,10 +61,10 @@ RuntimeError: (16, 'Device or resource busy')
 The reason this step will fail is that [pivot_root(new_root, put_old)](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html#linux.pivot_root) requires *new_root* to be a different filesystem then the old root.
 This will be resolved in step 04 when we mount an overlay filesystem as *new_root*.
 
-Alternatively, you can copy the image files to a loop or [tmpfs](https://en.wikipedia.org/wiki/Tmpfs) mount.
+To circumvent that, we can copy the image files to a [tmpfs](https://en.wikipedia.org/wiki/Tmpfs) mount.
 ```python
 # ...
-os.makedirs(container_root)
+# TODO: uncomment (why?)
 linux.mount('tmpfs', container_root, 'tmpfs', 0, None)
 # ...
 ```
