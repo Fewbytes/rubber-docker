@@ -27,8 +27,8 @@ We need to use umount2 and not umount because we need to pass certain flags to t
 
 ## Relevant Documentation
 
-- [man 2 pivot_root](http://linux.die.net/man/2/pivot_root)
-- [man 2 umount](http://linux.die.net/man/2/umount)
+- [man 2 pivot_root](http://man7.org/linux/man-pages/man2/pivot_root.2.html)
+- [man 2 umount2](http://man7.org/linux/man-pages/man2/umount2.2.html)
 
 ## How to check your work
 

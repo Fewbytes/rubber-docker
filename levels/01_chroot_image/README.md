@@ -32,7 +32,7 @@ You might notice upon completing this level that you have many unused entries in
 
 ## Relevant Documentation
 
-[chroot manpage](http://linux.die.net/man/2/chroot)
+[chroot manpage](http://man7.org/linux/man-pages/man2/chroot.2.html)
 
 ## How to check your work
 

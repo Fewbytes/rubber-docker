@@ -10,7 +10,7 @@ These system calls must be called before we _exec_, but after we do all the task
 
 ## Relevant Documentation
 
-- [man 2 setuid](http://linux.die.net/man/2/setuid)
+- [man 2 setuid](hhttp://man7.org/linux/man-pages/man2/setuid.2.html)
 
 ## How to check your work
 ```
