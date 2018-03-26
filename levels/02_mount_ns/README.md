@@ -12,7 +12,7 @@ Python doesn't have the mount syscall exposed; use the `linux` module provided i
 Also, it's time to create device nodes in our container root using [mknod()](https://docs.python.org/2/library/os.html#os.mknod):
 
 ```python
-os.mknod(os.path.join(dev_path, device), 0666 | S_IFCHR, os.makedev(major, minor))
+os.mknod(os.path.join(dev_path, device), 0666 | stat.S_IFCHR, os.makedev(major, minor))
 ```
 
 Look at the host's `/dev` and think which devices you might need, note their minor/major (using ls -l), and create them inside the container.
