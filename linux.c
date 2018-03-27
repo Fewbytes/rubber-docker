@@ -153,6 +153,7 @@ _umount2(PyObject *self, PyObject *args) {
                     "* ``linux.CLONE_NEWNS`` - Unshare the mount namespace\n"\
                     "* ``linux.CLONE_NEWUTS`` - Unshare the UTS namespace (hostname, domainname, etc)\n"\
                     "* ``linux.CLONE_NEWNET`` - Unshare the network namespace\n"\
+		    "* ``linux.CLONE_NEWPID`` - Unshare the PID namespace\n"\
 
 static PyObject *
 _unshare(PyObject *self, PyObject *args) {
