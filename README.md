@@ -31,7 +31,7 @@ There are currently 3 options to start the workshop by yourself:
  1. We have a [Vagrantfile](https://www.vagrantup.com/) for you to run using
     your favorite virtual machine hypervisor (NOTE: not yet fully tested).
 
-The workshop material in checked in `/workshop` on the instance:
+The workshop material is checked out at `/workshop` on the instance:
 - `/workshop/rubber-docker` - this repository, where you do all the work
 - `/workshop/images` - images for containers, already populated with ubuntu and busybox images
 
