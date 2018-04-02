@@ -118,7 +118,7 @@ def _setup_memory_cgroup(container_id, memory, memory_swap):
     container_mem_cgroup_dir = os.path.join(
         MEMORY_CGROUP_BASEDIR, 'rubber_docker', container_id)
 
-    # Insert the container to new cpu cgroup named 'rubber_docker/container_id'
+    # Insert the container to new memory cgroup named 'rubber_docker/container_id'
     if not os.path.exists(container_mem_cgroup_dir):
         os.makedirs(container_mem_cgroup_dir)
     tasks_file = os.path.join(container_mem_cgroup_dir, 'tasks')
