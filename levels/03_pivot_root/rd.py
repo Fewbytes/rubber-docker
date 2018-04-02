@@ -68,7 +68,7 @@ def makedev(dev_path):
                'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
         os.mknod(os.path.join(dev_path, device),
-                 0666 | dev_type, os.makedev(major, minor))
+                 0o666 | dev_type, os.makedev(major, minor))
 
 
 def contain(command, image_name, image_dir, container_id, container_dir):
@@ -76,7 +76,9 @@ def contain(command, image_name, image_dir, container_id, container_dir):
         linux.unshare(linux.CLONE_NEWNS)  # create a new mount namespace
     except RuntimeError as e:
         if getattr(e, 'args', '') == (1, 'Operation not permitted'):
-            print('Error: Use of CLONE_NEWNS with unshare(2) requires the CAP_SYS_ADMIN capability (i.e. you probably want to retry this with sudo)')
+            print('Error: Use of CLONE_NEWNS with unshare(2) requires the '
+                  'CAP_SYS_ADMIN capability (i.e. you probably want to retry '
+                  'this with sudo)')
         raise e
 
     # TODO: we added MS_REC here. wanna guess why?

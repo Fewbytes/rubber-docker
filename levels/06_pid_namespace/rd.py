@@ -77,7 +77,7 @@ def makedev(dev_path):
                'full': (stat.S_IFCHR, 1, 7)}
     for device, (dev_type, major, minor) in DEVICES.iteritems():
         os.mknod(os.path.join(dev_path, device),
-                 0666 | dev_type, os.makedev(major, minor))
+                 0o666 | dev_type, os.makedev(major, minor))
 
 
 def _create_mounts(new_root):
@@ -116,7 +116,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     os.chdir('/')
 
     linux.umount2('/old_root', linux.MNT_DETACH)  # umount old root
-    os.rmdir('/old_root') # rmdir the old_root dir
+    os.rmdir('/old_root')  # rmdir the old_root dir
 
     os.execvp(command[0], command)
 
