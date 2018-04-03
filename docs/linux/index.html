@@ -1,26 +1,15 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Docker from Scratch workshop &#8212; Rubber Docker 0.1 documentation</title>
-    
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.1',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -32,8 +21,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body role="document">
+  </head><body>
   
 
     <div class="document">
@@ -60,27 +48,27 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callback</strong> (<em>Callable</em>) &#8211; python function to be executed by the forked child</li>
-<li><strong>flags</strong> (<em>int</em>) &#8211; combination (using <code class="docutils literal"><span class="pre">|</span></code>) of flags specifying what should be shared
+<li><strong>callback</strong> (<em>Callable</em>) – python function to be executed by the forked child</li>
+<li><strong>flags</strong> (<em>int</em>) – combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of flags specifying what should be shared
 between the calling process and the child process. See below.</li>
-<li><strong>callback_args</strong> (<em>tuple</em>) &#8211; tuple of arguments for the callback function</li>
+<li><strong>callback_args</strong> (<em>tuple</em>) – tuple of arguments for the callback function</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">On success, the thread ID of the child process</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if clone fails</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if clone fails</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Useful flags:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
 </ul>
 </dd></dl>
 
@@ -98,20 +86,20 @@ between the calling process and the child process. See below.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>source</strong> (<em>str</em>) &#8211; filesystem to attach (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
-<li><strong>target</strong> (<em>str</em>) &#8211; directory being attached to, or manipulated (in case of flag change)</li>
-<li><strong>filesystemtype</strong> (<em>str</em>) &#8211; filesystem supported by the kernel (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
-<li><strong>mountflags</strong> (<em>int</em>) &#8211; any combination (using <code class="docutils literal"><span class="pre">|</span></code>) of mount flags supported by mount(2).
-For the workshop you are most likely to use <code class="docutils literal"><span class="pre">0</span></code> (i.e. no flags), 
-or a combination of: <code class="docutils literal"><span class="pre">linux.MS_REC</span></code>, <code class="docutils literal"><span class="pre">linux.MS_PRIVATE</span></code></li>
-<li><strong>mountopts</strong> (<em>str</em>) &#8211; options passed to the specified filesystem (can be <code class="docutils literal"><span class="pre">None</span></code>)</li>
+<li><strong>source</strong> (<em>str</em>) – filesystem to attach (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
+<li><strong>target</strong> (<em>str</em>) – directory being attached to, or manipulated (in case of flag change)</li>
+<li><strong>filesystemtype</strong> (<em>str</em>) – filesystem supported by the kernel (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
+<li><strong>mountflags</strong> (<em>int</em>) – any combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of mount flags supported by mount(2).
+For the workshop you are most likely to use <code class="docutils literal notranslate"><span class="pre">0</span></code> (i.e. no flags), 
+or a combination of: <code class="docutils literal notranslate"><span class="pre">linux.MS_REC</span></code>, <code class="docutils literal notranslate"><span class="pre">linux.MS_PRIVATE</span></code></li>
+<li><strong>mountopts</strong> (<em>str</em>) – options passed to the specified filesystem (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if mount fails</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if mount fails</p>
 </td>
 </tr>
 </tbody>
@@ -132,15 +120,15 @@ or a combination of: <code class="docutils literal"><span class="pre">linux.MS_R
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>new_root</strong> (<em>str</em>) &#8211; New root file system</li>
-<li><strong>put_old</strong> (<em>str</em>) &#8211; Directory to move the current process root file system to</li>
+<li><strong>new_root</strong> (<em>str</em>) – New root file system</li>
+<li><strong>put_old</strong> (<em>str</em>) – Directory to move the current process root file system to</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if pivot_root fails</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if pivot_root fails</p>
 </td>
 </tr>
 </tbody>
@@ -170,11 +158,11 @@ of /.. to the string pointed to by <cite>put_old</cite> must yield the same dire
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<em>str</em>) &#8211; new hostname value</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<em>str</em>) – new hostname value</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if sethostname fails</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if sethostname fails</td>
 </tr>
 </tbody>
 </table>
@@ -194,17 +182,17 @@ of /.. to the string pointed to by <cite>put_old</cite> must yield the same dire
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fd</strong> (<em>int</em>) &#8211; file descriptor referring to a namespace to associate with</li>
-<li><strong>nstype</strong> (<em>int</em>) &#8211; one of the following: <code class="docutils literal"><span class="pre">0</span></code> (Allow any type of namespace to be joined),
-<code class="docutils literal"><span class="pre">CLONE_NEWIPC</span></code> (join IPC namespace), <code class="docutils literal"><span class="pre">CLONE_NEWNET</span></code> (join network 
-namespace), or <code class="docutils literal"><span class="pre">CLONE_NEWUTS</span></code> (join UTS namespace)</li>
+<li><strong>fd</strong> (<em>int</em>) – file descriptor referring to a namespace to associate with</li>
+<li><strong>nstype</strong> (<em>int</em>) – one of the following: <code class="docutils literal notranslate"><span class="pre">0</span></code> (Allow any type of namespace to be joined),
+<code class="docutils literal notranslate"><span class="pre">CLONE_NEWIPC</span></code> (join IPC namespace), <code class="docutils literal notranslate"><span class="pre">CLONE_NEWNET</span></code> (join network 
+namespace), or <code class="docutils literal notranslate"><span class="pre">CLONE_NEWUTS</span></code> (join UTS namespace)</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if setns fails</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if setns fails</p>
 </td>
 </tr>
 </tbody>
@@ -224,11 +212,11 @@ namespace), or <code class="docutils literal"><span class="pre">CLONE_NEWUTS</sp
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>str</em>) &#8211; the (topmost) filesystem this directory is mounted on will be removed</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if umount fails</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if umount fails</td>
 </tr>
 </tbody>
 </table>
@@ -248,17 +236,17 @@ namespace), or <code class="docutils literal"><span class="pre">CLONE_NEWUTS</sp
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<em>str</em>) &#8211; the (topmost) filesystem this directory is mounted on will be removed</li>
-<li><strong>flags</strong> (<em>int</em>) &#8211; control the behavior of the operation. You can combine multiple flags
-using <code class="docutils literal"><span class="pre">|</span></code>. For the workshop you are most likely to use
-<code class="docutils literal"><span class="pre">linux.MNT_DETACH</span></code></li>
+<li><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</li>
+<li><strong>flags</strong> (<em>int</em>) – control the behavior of the operation. You can combine multiple flags
+using <code class="docutils literal notranslate"><span class="pre">|</span></code>. For the workshop you are most likely to use
+<code class="docutils literal notranslate"><span class="pre">linux.MNT_DETACH</span></code></li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> &#8211; if umount2 fails</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if umount2 fails</p>
 </td>
 </tr>
 </tbody>
@@ -278,21 +266,22 @@ using <code class="docutils literal"><span class="pre">|</span></code>. For the 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flags</strong> (<em>int</em>) &#8211; which parts of the execution context should be unshared. You can
-combine multiple flags using <code class="docutils literal"><span class="pre">|</span></code>. See below for flags you might want
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flags</strong> (<em>int</em>) – which parts of the execution context should be unshared. You can
+combine multiple flags using <code class="docutils literal notranslate"><span class="pre">|</span></code>. See below for flags you might want
 to use in this workshop</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> &#8211; if unshare fails</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if unshare fails</td>
 </tr>
 </tbody>
 </table>
 <p>Useful flags:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
+<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
 </ul>
 </dd></dl>
 
@@ -328,12 +317,14 @@ to use in this workshop</td>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -344,8 +335,8 @@ to use in this workshop</td>
       &copy;2016, Avishai Ish-Shalom, Nati Cohen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="_sources/index.rst.txt"
