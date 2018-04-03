@@ -38,3 +38,30 @@ The workshop material is checked out at `/workshop` on the instance:
 Before starting the workshop, go over the prep docs in the `docs` folder.
 
 Start the workshop at `/workshop/rubber-docker/levels/00_fork_exec`.
+
+# PR stuff
+This workshop has been publicly given in many places starting February 2016.
+
+- Opstalk meetup, Tel-Aviv, February 2016
+- DevOps Sydney meetup, Sydney, June 2016
+- DevOpsDays Amsterdam, Amsterdam, June 2016
+- SRECon EU, Dublin, July 2016
+- Sela Developer Practice, Tel-Aviv, June 2016
+- SRECon US, Santa Clara, March 2018
+- DevOpsDays Kiel, Kiel, May 2018
+
+# FAQ
+Q: Why did you create this?
+A: Because we feel the only way to truly understand something to build it from scratch - and Linux containers are a very hyped and poorly understood technology
+
+Q: Can I use this repository to conduct my own public/private workshop?
+A: Of course! If you do, please consider letting us know on Twitter (@nukemberg and @nocoot) and of course send feedback.
+
+Q: This workshop doesn't cover seccomp/user containers/whatever
+A: Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work
+
+Q: I found a bug!
+A: See contributions below
+
+# Contributions
+Contributions are welcome! If you found a bug or something to improve feel free to open an issue or a pull request. Please note that the entire repository is under MIT license and your contribution will be under that license.
