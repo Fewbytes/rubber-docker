@@ -54,17 +54,17 @@ This workshop has been publicly given in many places starting February 2016.
 - DevOpsDays Kiel, Kiel, May 2018
 
 # FAQ
-Q: Why did you create this?
-A: Because we feel the only way to truly understand something to build it from scratch - and Linux containers are a very hyped and poorly understood technology
+### Why did you create this?
+Because we feel the only way to truly understand something to build it from scratch - and Linux containers are a very hyped and poorly understood technology
 
-Q: Can I use this repository to conduct my own public/private workshop?
-A: Of course! If you do, please consider letting us know on Twitter (@nukemberg and @nocoot) and of course send feedback.
+### Can I use this repository to conduct my own public/private workshop?
+Of course! If you do, please consider letting us know on Twitter (@nukemberg and @nocoot) and of course send feedback.
 
-Q: This workshop doesn't cover seccomp/user containers/whatever
-A: Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work
+### This workshop doesn't cover seccomp/user containers/whatever
+Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work
 
-Q: I found a bug!
-A: See contributions below
+### I found a bug!
+See contributions below
 
 # Contributions
 Contributions are welcome! If you found a bug or something to improve feel free to open an issue or a pull request. Please note that the entire repository is under MIT license and your contribution will be under that license.
