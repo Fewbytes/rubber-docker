@@ -19,7 +19,7 @@ you can always find the solution for level N in the level N+1 skeleton.
 ## The linux python module
 Not all the necessary system calls are exposed in python's standard library.
 In addition, we want to preserve the semantics of the system calls and use them as if we were writing C.
-We therefore wrote a python module called *linux* (take a look at [linux.c](linux.c)) which exposes the relevant system calls. 
+We, therefore, wrote a python module called *linux* (take a look at [linux.c](linux.c)) which exposes the relevant system calls. 
 Have a look at the [module documentation](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) for more info.
 
 ## Quickstart
@@ -61,7 +61,7 @@ Because we feel the only way to truly understand something to build it from scra
 Of course! If you do, please consider letting us know on Twitter (@nukemberg and @nocoot) and of course send feedback.
 
 ### This workshop doesn't cover seccomp/user containers/whatever
-Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work
+Yes, no way we can cover the entire feature set of a real container engine. We tried to concentrate on the thing we believe are important for understanding how containers work
 
 ### I found a bug!
 See contributions below
