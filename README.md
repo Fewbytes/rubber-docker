@@ -3,7 +3,7 @@
 
 ## Preparatory Talk
 [The preparatory talk](https://docs.google.com/presentation/d/10vFQfEUvpf7qYyksNqiy-bAxcy-bvF0OnUElCOtTTRc/edit?usp=sharing)
-covers all the basics you'll need for this workshop, including:
+covers all the basics you will need for this workshop, including:
 - Linux syscalls and glibc wrappers
 - chroot vs pivot_root
 - namespaces
@@ -13,13 +13,12 @@ covers all the basics you'll need for this workshop, including:
 
 ## The Workshop
 Use [the provided slides](https://github.com/Fewbytes/rubber-docker/tree/master/slides) while advancing through the levels, adding more features to your container.
-Remember to go over each level's readme, and if things get rough -
-you can always find the solution for level N in the level N+1 skeleton.
+Remember to go over each level's readme, and if things get rough, then find the solution for level N in the level N+1 skeleton.
 
 ## The linux python module
 Not all the necessary system calls are exposed in python's standard library.
 In addition, we want to preserve the semantics of the system calls and use them as if we were writing C.
-We therefore wrote a python module called *linux* (take a look at [linux.c](linux.c)) which exposes the relevant system calls. 
+To exposes the relevant system calls, we wrote a python module called *linux* (take a look at [linux.c](linux.c)). 
 Have a look at the [module documentation](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) for more info.
 
 ## Quickstart
@@ -55,16 +54,16 @@ This workshop has been publicly given in many places starting February 2016.
 
 # FAQ
 ### Why did you create this?
-Because we feel the only way to truly understand something to build it from scratch - and Linux containers are a very hyped and poorly understood technology
+We feel the only way to truly understand something is to build it from scratch - and Linux containers are a very hyped and poorly understood technology.
 
 ### Can I use this repository to conduct my own public/private workshop?
 Of course! If you do, please consider letting us know on Twitter (@nukemberg and @nocoot) and of course send feedback.
 
 ### This workshop doesn't cover seccomp/user containers/whatever
-Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work
+Yes, no way we can cover the entire featureset of a real container engine. We tried to concentrate on thing we believe are important for understanding how containers work.
 
 ### I found a bug!
 See contributions below
 
 # Contributions
-Contributions are welcome! If you found a bug or something to improve feel free to open an issue or a pull request. Please note that the entire repository is under MIT license and your contribution will be under that license.
+Contributions are welcome! If you find a bug or have something to improve, then feel free to open an issue or a pull request. Please note the entire repository is under MIT license and your contribution will be under that license.
