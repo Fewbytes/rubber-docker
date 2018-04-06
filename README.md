@@ -68,3 +68,7 @@ See contributions below
 
 # Contributions
 Contributions are welcome! If you found a bug or something to improve feel free to open an issue or a pull request. Please note that the entire repository is under MIT license and your contribution will be under that license.
+
+# Sponsors
+We'd like to thank our friends at [Strigo.io](http://strigo.io/) for kindly providing their platform, and allowing us to deliver this and other workshops without worrying about infrastructure.
+If you plan to deliver this workshop yourself, we highly encourage you to [contact them](contact@strigo.io).
