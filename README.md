@@ -41,15 +41,15 @@ VM on Azure with the following procedure:
 
 1. Build the image with Packer:
     ```bash
-    $ packer build packer/rubber-duck-azure.json
+    $ packer build packer/rubber-docker-azure.json
     ```
 1. Create the VM based on the new image:
    ```bash
    az vm create \
 	--resource-group PackerImages \
-	--name rubber-duck \
+	--name rubber-docker \
 	--location westus2 \
-	--image rubberDuck \
+	--image rubberDocker \
 	--admin-user ubuntu \
 	--generate-ssh-keys
     ```
