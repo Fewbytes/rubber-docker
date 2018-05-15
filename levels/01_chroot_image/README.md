@@ -36,7 +36,7 @@ You might notice upon completing this level that you have many unused entries in
 
 ## How to check your work
 
-Without extracting an image:
+Without calling `chroot` (_wrong_):
 ```shell
 $ sudo python rd.py run -i ubuntu -- /bin/ls -l /workshop/rubber-docker/levels/
 total 44
@@ -54,7 +54,7 @@ drwxr-xr-x 2 ubuntu ubuntu 4096 Jun 20 21:37 10_setuid
 1620 exited with status 0
 ```
 
-With an extracted image:
+With `chroot` and an extracted image (_good_):
 ```shell
 $ sudo python rd.py run -i ubuntu -- /bin/ls -l /workshop/rubber-docker/levels/
 Created a new root fs for our container: /workshop/containers/1739af4b-3849-4e88-ae65-dc98264a0e69/rootfs
