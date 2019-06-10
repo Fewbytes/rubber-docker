@@ -20,16 +20,21 @@ fi
 sleep 10
 
 # Install packages
+echo "Installing packages..."
+apt-get -y install software-properties-common
 add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 0EBFCD88
 apt-get update
-apt-get -y install docker-ce stress python-dev build-essential cmake htop ipython python-pip git
+apt-get -y install docker-ce stress python-dev build-essential cmake htop ipython python-pip git vim
 
 # Include the memory and memsw cgroups
-sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
+if [ -f /boot/grub/menu.lst ]; then
+   # Not available in recent Ubuntu builds, so this is optional. 
+   sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
+fi
 sed -i -r 's|GRUB_CMDLINE_LINUX="(.*)"|GRUB_CMDLINE_LINUX="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
 update-grub
 
@@ -45,7 +50,7 @@ systemctl restart docker
 usermod -G docker -a ubuntu
 
 # Clone git repo
-mkdir /workshop
+mkdir -p /workshop
 pushd /workshop
 git clone https://github.com/Fewbytes/rubber-docker.git
 pip install -r rubber-docker/requirements.txt
