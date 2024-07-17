@@ -1,61 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @import url("basic.css");
 
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
+    font-family: Georgia, serif;
     font-size: 17px;
     background-color: #fff;
     color: #000;
@@ -121,6 +69,11 @@ div.relations {
 }
 
 
+div.sphinxsidebar {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
 div.sphinxsidebar a {
     color: #444;
     text-decoration: none;
@@ -159,7 +112,7 @@ div.sphinxsidebarwrapper p.blurb {
 
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    font-family: 'Garamond', 'Georgia', serif;
+    font-family: Georgia, serif;
     color: #444;
     font-size: 24px;
     font-weight: normal;
@@ -203,8 +156,16 @@ div.sphinxsidebar ul li.toctree-l2 > a {
 
 div.sphinxsidebar input {
     border: 1px solid #CCC;
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
+    font-family: Georgia, serif;
     font-size: 1em;
+}
+
+div.sphinxsidebar #searchbox input[type="text"] {
+    width: 160px;
+}
+
+div.sphinxsidebar .search > div {
+    display: table-cell;
 }
 
 div.sphinxsidebar hr {
@@ -216,6 +177,19 @@ div.sphinxsidebar hr {
     text-align: left;
     margin-left: 0;
     width: 50%;
+}
+
+div.sphinxsidebar .badge {
+    border-bottom: none;
+}
+
+div.sphinxsidebar .badge:hover {
+    border-bottom: none;
+}
+
+/* To address an issue with donation coming after search */
+div.sphinxsidebar h3.donation {
+    margin-top: 10px;
 }
 
 /* -- body styles ----------------------------------------------------------- */
@@ -236,7 +210,7 @@ div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-    font-family: 'Garamond', 'Georgia', serif;
+    font-family: Georgia, serif;
     font-weight: normal;
     margin: 30px 0px 10px 0px;
     padding: 0;
@@ -277,7 +251,7 @@ div.admonition tt.xref, div.admonition code.xref, div.admonition a tt {
 }
 
 div.admonition p.admonition-title {
-    font-family: 'Garamond', 'Georgia', serif;
+    font-family: Georgia, serif;
     font-weight: normal;
     font-size: 24px;
     margin: 0 0 10px 0;
@@ -366,7 +340,7 @@ p.admonition-title:after {
 }
 
 pre, tt, code {
-    font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    font-family: 'Consolas', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
     font-size: 0.9em;
 }
 
@@ -458,7 +432,9 @@ table.footnote td {
 }
 
 dl {
-    margin: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
     padding: 0;
 }
 
@@ -675,19 +651,58 @@ a:hover tt, a:hover code {
     display: none!important;
 }
 
-/* Make nested-list/multi-paragraph items look better in Releases changelog
- * pages. Without this, docutils' magical list fuckery causes inconsistent
- * formatting between different release sub-lists.
- */
-div#changelog > div.section > ul > li > p:only-child {
-    margin-bottom: 0;
-}
-
-/* Hide fugly table cell borders in ..bibliography:: directive output */
+/* Hide ugly table cell borders in ..bibliography:: directive output */
 table.docutils.citation, table.docutils.citation td, table.docutils.citation th {
   border: none;
   /* Below needed in some edge cases; if not applied, bottom shadows appear */
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+
+/* relbar */
+
+.related {
+    line-height: 30px;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.related.top {
+    border-bottom: 1px solid #EEE;
+    margin-bottom: 20px;
+}
+
+.related.bottom {
+    border-top: 1px solid #EEE;
+}
+
+.related ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.related li {
+    display: inline;
+}
+
+nav#rellinks {
+    float: right;
+}
+
+nav#rellinks li+li:before {
+    content: "|";
+}
+
+nav#breadcrumbs li+li:before {
+    content: "\00BB";
+}
+
+/* Hide certain items when printing */
+@media print {
+    div.related {
+        display: none;
+    }
 }

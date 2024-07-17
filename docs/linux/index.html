@@ -1,25 +1,24 @@
+<!DOCTYPE html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Docker from Scratch workshop &#8212; Rubber Docker 0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=2709fde1"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -27,280 +26,264 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="module-linux">
-<span id="docker-from-scratch-workshop"></span><h1>Docker from Scratch workshop<a class="headerlink" href="#module-linux" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="linux">
-<h2>linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+  <section id="module-linux">
+<span id="docker-from-scratch-workshop"></span><h1>Docker from Scratch workshop<a class="headerlink" href="#module-linux" title="Link to this heading">¶</a></h1>
+<section id="linux">
+<h2>linux<a class="headerlink" href="#linux" title="Link to this heading">¶</a></h2>
 <p>The linux module is a simple Python c extension, containing syscall wrappers missing from the Python os module. You will need to use these system calls to implement different aspect of process containment during the workshop.</p>
-<dl class="function">
-<dt id="linux.clone">
-<code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.clone" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">clone</code><span class="sig-paren">(</span><em>callback</em>, <em>flags</em>, <em>callback_args</em><span class="sig-paren">)</span></dt>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.clone">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.clone" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>create a child process</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>callback</strong> (<em>Callable</em>) – python function to be executed by the forked child</li>
-<li><strong>flags</strong> (<em>int</em>) – combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of flags specifying what should be shared
-between the calling process and the child process. See below.</li>
-<li><strong>callback_args</strong> (<em>tuple</em>) – tuple of arguments for the callback function</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callback</strong> (<em>Callable</em>) – python function to be executed by the forked child</p></li>
+<li><p><strong>flags</strong> (<em>int</em>) – combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of flags specifying what should be shared
+between the calling process and the child process. See below.</p></li>
+<li><p><strong>callback_args</strong> (<em>tuple</em>) – tuple of arguments for the callback function</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">On success, the thread ID of the child process</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if clone fails</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>On success, the thread ID of the child process</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if clone fails</p>
+</dd>
+</dl>
 <p>Useful flags:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</p></li>
 </ul>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.mount">
-<code class="descclassname">linux.</code><code class="descname">mount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.mount" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">mount</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>filesystemtype</em>, <em>mountflags</em>, <em>mountopts</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.mount">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">mount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.mount" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">mount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesystemtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mountflags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mountopts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>mount filesystem</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>source</strong> (<em>str</em>) – filesystem to attach (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
-<li><strong>target</strong> (<em>str</em>) – directory being attached to, or manipulated (in case of flag change)</li>
-<li><strong>filesystemtype</strong> (<em>str</em>) – filesystem supported by the kernel (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
-<li><strong>mountflags</strong> (<em>int</em>) – any combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of mount flags supported by mount(2).
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – filesystem to attach (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><strong>target</strong> (<em>str</em>) – directory being attached to, or manipulated (in case of flag change)</p></li>
+<li><p><strong>filesystemtype</strong> (<em>str</em>) – filesystem supported by the kernel (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
+<li><p><strong>mountflags</strong> (<em>int</em>) – any combination (using <code class="docutils literal notranslate"><span class="pre">|</span></code>) of mount flags supported by mount(2).
 For the workshop you are most likely to use <code class="docutils literal notranslate"><span class="pre">0</span></code> (i.e. no flags), 
-or a combination of: <code class="docutils literal notranslate"><span class="pre">linux.MS_REC</span></code>, <code class="docutils literal notranslate"><span class="pre">linux.MS_PRIVATE</span></code></li>
-<li><strong>mountopts</strong> (<em>str</em>) – options passed to the specified filesystem (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</li>
+or a combination of: <code class="docutils literal notranslate"><span class="pre">linux.MS_REC</span></code>, <code class="docutils literal notranslate"><span class="pre">linux.MS_PRIVATE</span></code></p></li>
+<li><p><strong>mountopts</strong> (<em>str</em>) – options passed to the specified filesystem (can be <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if mount fails</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if mount fails</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.pivot_root">
-<code class="descclassname">linux.</code><code class="descname">pivot_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.pivot_root" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">pivot_root</code><span class="sig-paren">(</span><em>new_root</em>, <em>put_old</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.pivot_root">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">pivot_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.pivot_root" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">pivot_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">put_old</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>change the root filesystem</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>new_root</strong> (<em>str</em>) – New root file system</li>
-<li><strong>put_old</strong> (<em>str</em>) – Directory to move the current process root file system to</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_root</strong> (<em>str</em>) – New root file system</p></li>
+<li><p><strong>put_old</strong> (<em>str</em>) – Directory to move the current process root file system to</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if pivot_root fails</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if pivot_root fails</p>
+</dd>
+</dl>
 <p><strong>NOTE:</strong> The following restrictions apply to <cite>new_root</cite> and <cite>put_old</cite>:</p>
 <ul class="simple">
-<li>They must be directories.</li>
-<li><cite>new_root</cite> and put_old must not be on the same filesystem as the current root.</li>
-<li><cite>new_root</cite> must be a mountpoint.</li>
-<li><cite>put_old</cite> must  be  underneath <cite>new_root</cite>, that is, adding a nonzero number
+<li><p>They must be directories.</p></li>
+<li><p><cite>new_root</cite> and put_old must not be on the same filesystem as the current root.</p></li>
+<li><p><cite>new_root</cite> must be a mountpoint.</p></li>
+<li><p><cite>put_old</cite> must  be  underneath <cite>new_root</cite>, that is, adding a nonzero number
 of /.. to the string pointed to by <cite>put_old</cite> must yield the same directory as
-<cite>new_root</cite>.</li>
-<li>No other filesystem may be mounted on <cite>put_old</cite>.</li>
+<cite>new_root</cite>.</p></li>
+<li><p>No other filesystem may be mounted on <cite>put_old</cite>.</p></li>
 </ul>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.sethostname">
-<code class="descclassname">linux.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.sethostname" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.sethostname">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">sethostname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.sethostname" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">sethostname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>set the system hostname</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostname</strong> (<em>str</em>) – new hostname value</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if sethostname fails</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hostname</strong> (<em>str</em>) – new hostname value</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if sethostname fails</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.setns">
-<code class="descclassname">linux.</code><code class="descname">setns</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.setns" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">setns</code><span class="sig-paren">(</span><em>fd</em>, <em>nstype</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.setns">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">setns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.setns" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">setns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>reassociate process with a namespace</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fd</strong> (<em>int</em>) – file descriptor referring to a namespace to associate with</li>
-<li><strong>nstype</strong> (<em>int</em>) – one of the following: <code class="docutils literal notranslate"><span class="pre">0</span></code> (Allow any type of namespace to be joined),
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fd</strong> (<em>int</em>) – file descriptor referring to a namespace to associate with</p></li>
+<li><p><strong>nstype</strong> (<em>int</em>) – one of the following: <code class="docutils literal notranslate"><span class="pre">0</span></code> (Allow any type of namespace to be joined),
 <code class="docutils literal notranslate"><span class="pre">CLONE_NEWIPC</span></code> (join IPC namespace), <code class="docutils literal notranslate"><span class="pre">CLONE_NEWNET</span></code> (join network 
-namespace), or <code class="docutils literal notranslate"><span class="pre">CLONE_NEWUTS</span></code> (join UTS namespace)</li>
+namespace), or <code class="docutils literal notranslate"><span class="pre">CLONE_NEWUTS</span></code> (join UTS namespace)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if setns fails</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if setns fails</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.umount">
-<code class="descclassname">linux.</code><code class="descname">umount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">umount</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.umount">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">umount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">umount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>unmount filesystem</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if umount fails</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if umount fails</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.umount2">
-<code class="descclassname">linux.</code><code class="descname">umount2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount2" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">umount2</code><span class="sig-paren">(</span><em>target</em>, <em>flags</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.umount2">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">umount2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.umount2" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">umount2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>unmount filesystem but allows additional <cite>flags</cite> controlling the behavior of the operation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</li>
-<li><strong>flags</strong> (<em>int</em>) – control the behavior of the operation. You can combine multiple flags
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<em>str</em>) – the (topmost) filesystem this directory is mounted on will be removed</p></li>
+<li><p><strong>flags</strong> (<em>int</em>) – control the behavior of the operation. You can combine multiple flags
 using <code class="docutils literal notranslate"><span class="pre">|</span></code>. For the workshop you are most likely to use
-<code class="docutils literal notranslate"><span class="pre">linux.MNT_DETACH</span></code></li>
+<code class="docutils literal notranslate"><span class="pre">linux.MNT_DETACH</span></code></p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">None</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>RuntimeError</strong> – if umount2 fails</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if umount2 fails</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="linux.unshare">
-<code class="descclassname">linux.</code><code class="descname">unshare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.unshare" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="function">
-<dt>
-<code class="descclassname">linux.</code><code class="descname">unshare</code><span class="sig-paren">(</span><em>flags</em><span class="sig-paren">)</span></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="linux.unshare">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">unshare</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#linux.unshare" title="Link to this definition">¶</a></dt>
+<dd><dl class="py function">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-prename descclassname"><span class="pre">linux.</span></span><span class="sig-name descname"><span class="pre">unshare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>disassociate parts of the process execution context</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flags</strong> (<em>int</em>) – which parts of the execution context should be unshared. You can
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>flags</strong> (<em>int</em>) – which parts of the execution context should be unshared. You can
 combine multiple flags using <code class="docutils literal notranslate"><span class="pre">|</span></code>. See below for flags you might want
-to use in this workshop</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>RuntimeError</strong> – if unshare fails</td>
-</tr>
-</tbody>
-</table>
+to use in this workshop</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – if unshare fails</p>
+</dd>
+</dl>
 <p>Useful flags:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</li>
-<li><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNS</span></code> - Unshare the mount namespace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWUTS</span></code> - Unshare the UTS namespace (hostname, domainname, etc)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWNET</span></code> - Unshare the network namespace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linux.CLONE_NEWPID</span></code> - Unshare the PID namespace</p></li>
 </ul>
 </dd></dl>
 
-</div>
-</div>
+</section>
 
 
           </div>
+          
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Docker from Scratch workshop</a><ul>
-<li><a class="reference internal" href="#linux">linux</a></li>
-</ul>
-</li>
-</ul>
+<h1 class="logo"><a href="#">Rubber Docker</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -308,35 +291,34 @@ to use in this workshop</td>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2016, Avishai Ish-Shalom, Nati Cohen.
+      &#169;2016, Avishai Ish-Shalom, Nati Cohen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.5</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="_sources/index.rst.txt"
