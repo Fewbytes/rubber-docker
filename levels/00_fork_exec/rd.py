@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """Docker From Scratch Workshop - Level 0: Starting a new process.
 
 Goal: We want to start a new linux process using the fork & exec model.
@@ -13,7 +13,7 @@ Usage:
         - while the parent waits for it to finish
 """
 
-from __future__ import print_function
+
 
 import click
 import os

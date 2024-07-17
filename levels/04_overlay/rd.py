@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """Docker From Scratch Workshop - Level 4: Add overlay FS.
 
 Goal: Instead of re-extracting the image, use it as a read-only layer
@@ -10,7 +10,7 @@ Read more on overlay FS here:
 https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt
 """
 
-from __future__ import print_function
+
 
 import linux
 import tarfile
@@ -69,7 +69,7 @@ def makedev(dev_path):
                'random': (stat.S_IFCHR, 1, 8), 'urandom': (stat.S_IFCHR, 1, 9),
                'console': (stat.S_IFCHR, 136, 1), 'tty': (stat.S_IFCHR, 5, 0),
                'full': (stat.S_IFCHR, 1, 7)}
-    for device, (dev_type, major, minor) in DEVICES.iteritems():
+    for device, (dev_type, major, minor) in DEVICES.items():
         os.mknod(os.path.join(dev_path, device),
                  0o666 | dev_type, os.makedev(major, minor))
 

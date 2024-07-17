@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """Docker From Scratch Workshop - Level 2: Adding mount namespace.
 
 Goal: Separate our mount table from the other processes.
@@ -10,7 +10,7 @@ Usage:
         - fork a new chrooted process in a new mount namespace
 """
 
-from __future__ import print_function
+
 
 import linux
 import tarfile

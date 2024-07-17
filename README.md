@@ -42,6 +42,26 @@ Before starting the workshop, go over the prep docs in the `docs` folder.
 
 Start the workshop at `/workshop/rubber-docker/levels/00_fork_exec`.
 
+## Dev environment
+If you need to build the `linux` module, use `pip`:
+
+```sh
+pip install .  # Build wheel and install it
+```
+
+If you want a distributable wheel:
+```sh
+pip wheel .
+```
+
+To create a virtual environment for development, install the module in editable mode:
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -e .
+```
+
+
 # PR stuff
 This workshop has been publicly given in many places starting February 2016.
 
@@ -65,6 +85,7 @@ Yes, no way we can cover the entire featureset of a real container engine. We tr
 
 ### I found a bug!
 See contributions below
+
 
 # Contributions
 Contributions are welcome! If you found a bug or something to improve feel free to open an issue or a pull request. Please note that the entire repository is under MIT license and your contribution will be under that license.

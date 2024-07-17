@@ -302,10 +302,19 @@ static PyMethodDef LinuxMethods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+static struct PyModuleDef linuxmodule = {
+	PyModuleDef_HEAD_INIT,
+	"linux",
+	LINUX_MODULE_DOC,
+	-1,
+	LinuxMethods
+};
+
 PyMODINIT_FUNC
-initlinux(void)
+PyInit_linux(void)
 {
-	PyObject *module = Py_InitModule3("linux", LinuxMethods, LINUX_MODULE_DOC);
+	PyObject *module = PyModule_Create(&linuxmodule);
+
 
 	// clone constants
 	PyModule_AddIntConstant(module, "CLONE_NEWNS", CLONE_NEWNS);     // mount namespace
@@ -344,4 +353,6 @@ initlinux(void)
 	PyModule_AddIntConstant(module, "MS_NOUSER", MS_NOUSER);
 	PyModule_AddIntConstant(module, "MNT_DETACH", MNT_DETACH);             /* Just detach from the tree.  */
 	PyModule_AddIntConstant(module, "MS_MGC_VAL", MS_MGC_VAL);
+	
+	return module;
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 """Docker From Scratch Workshop - Level 1: Chrooting into an image.
 
 Goal: Let's get some filesystem isolation with good ol' chroot.
@@ -14,7 +14,6 @@ Usage:
         while the parent waits for it to finish.
 """
 
-from __future__ import print_function
 
 import os
 import tarfile

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rubber-docker"
+version = "1.0.0"
+dependencies = [
+  "click",
+]
+requires-python = ">=3.8"
+platforms = ["cp3-none-linux_x86_64"]
+authors = [
+  {name = "Avishai Ish-Shalom", email = "avishai.ishshalom@gmail.com"},
+  {name = "Nati Cohen", email = "nocoot@gmail.com"},
+]
+maintainers = [
+  {name = "Avishai Ish-Shalom", email = "avishai.ishshalom@gmail.com"},
+  {name = "Nati Cohen", email = "nocoot@gmail.com"},
+]
+description = "Docker from scratch"
+readme = "README.md"
+license = {file = "LICENSE"}
+keywords = ["docker", "containers"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/Fewbytes/rubber-docker"
+Documentation = "hhttps://github.com/Fewbytes/rubber-docker"
+Repository = "https://github.com/Fewbytes/rubber-docker.git"
+"Bug Tracker" = "https://github.com/Fewbytes/rubber-docker/issues"
+
+[tool.setuptools]
+packages = ["linux"]
+package-dir = {"linux" = "."} 
