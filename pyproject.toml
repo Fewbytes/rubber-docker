@@ -9,7 +9,6 @@ dependencies = [
   "click",
 ]
 requires-python = ">=3.8"
-platforms = ["cp3-none-linux_x86_64"]
 authors = [
   {name = "Avishai Ish-Shalom", email = "avishai.ishshalom@gmail.com"},
   {name = "Nati Cohen", email = "nocoot@gmail.com"},

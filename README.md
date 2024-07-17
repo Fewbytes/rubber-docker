@@ -43,22 +43,15 @@ Before starting the workshop, go over the prep docs in the `docs` folder.
 Start the workshop at `/workshop/rubber-docker/levels/00_fork_exec`.
 
 ## Dev environment
-If you need to build the `linux` module, use `pip`:
+If you need to build and install the `linux` module:
 
 ```sh
-pip install .  # Build wheel and install it
+make install 
 ```
 
-If you want a distributable wheel:
+If you want a distributable wheel package:
 ```sh
-pip wheel .
-```
-
-To create a virtual environment for development, install the module in editable mode:
-
-```sh
-python3 -m venv .venv
-.venv/bin/pip install -e .
+make build
 ```
 
 
