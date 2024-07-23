@@ -29,8 +29,8 @@ There are currently 3 options to start the workshop by yourself:
     - us-west-1: ami-07f8ee67
     - us-east-1: ami-1162bc6c
     - eu-central-1: ami-9a663471
- 1. We provide a [packer template](https://www.packer.io/) so you can create
-    your own AMI.
+ 1. We provide [packer templates](https://www.packer.io/) so you can create
+    your own AMI or VMware OVA.
  1. We have a [Vagrantfile](https://www.vagrantup.com/) for you to run using
     your favorite virtual machine hypervisor (NOTE: not yet fully tested).
 
