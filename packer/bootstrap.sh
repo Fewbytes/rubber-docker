@@ -20,18 +20,24 @@ fi
 sleep 10
 
 # Install packages
-add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 0EBFCD88
-apt-get update
-apt-get -y install docker-ce stress python-dev build-essential cmake htop ipython python-pip git
+export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_PRIORITY=critical
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
 
-# Include the memory and memsw cgroups
-sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
-sed -i -r 's|GRUB_CMDLINE_LINUX="(.*)"|GRUB_CMDLINE_LINUX="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
-update-grub
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt update
+apt install -y docker-ce stress python3-dev build-essential cmake htop ipython3 python3-pip python3-click git
+
+# Include the memory and memsw cgroups for cgroups v1 on old images; not needed for ubuntu 24.04 cgroups v2
+# sed -i.bak 's|^kernel.*$|\0 cgroup_enable=memory swapaccount=1|' /boot/grub/menu.lst
+# sed -i -r 's|GRUB_CMDLINE_LINUX="(.*)"|GRUB_CMDLINE_LINUX="\1 cgroup_enable=memory swapaccount=1"|' /etc/default/grub
+# update-grub
 
 # Configure Docker to use overlayfs
 cat - > /etc/docker/daemon.json <<'EOF'
@@ -46,15 +52,12 @@ usermod -G docker -a ubuntu
 
 # Clone git repo
 mkdir /workshop
-pushd /workshop
-git clone https://github.com/Fewbytes/rubber-docker.git
-pip install -r rubber-docker/requirements.txt
-popd
+git clone https://github.com/Fewbytes/rubber-docker.git /workshop/rubber-docker
 
 # Fetch images
 mkdir -p /workshop/images
 pushd /workshop/images
-export_image ubuntu:trusty ubuntu-export /bin/bash -c 'apt-get update && apt-get install -y python stress'
+export_image ubuntu:noble ubuntu-export /bin/bash -c 'apt get update && apt get install -y python stress'
 export_image busybox busybox /bin/true
 cp /workshop/rubber-docker/levels/03_pivot_root/breakout.py ./
 chmod +x breakout.py
@@ -70,8 +73,8 @@ cat > /etc/rc.local <<'EOF'
 # Pull latest version of rubber-docker, install requirements & build the C extension
 if [[ -d /workshop/rubber-docker ]]; then
     pushd /workshop/rubber-docker
-    git pull && python setup.py install
-    [[ -f requirements.txt ]] && pip install -r requirements.txt
+    git pull && pip install --break-system-packages .
+    # [[ -f requirements.txt ]] && pip install -r requirements.txt
     popd
 fi
 
@@ -100,5 +103,5 @@ cp /tmp/vimrc ~/.vimrc
 echo "Installing plugins using Vundle"
 echo | echo | vim +PluginInstall +qall &>/dev/null
 echo "Vundle done"
-python ~/.vim/bundle/YouCompleteMe/install.py 
+python3 ~/.vim/bundle/YouCompleteMe/install.py 
 EOS

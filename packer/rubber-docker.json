@@ -3,8 +3,7 @@
 	    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
 	    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
 	    "aws_region": "eu-central-1",
-	    "source_ami": "ami-fe408091",
-	    "subnet_id": "subnet-24e10b4d"
+	    "source_ami": "ami-0e872aee57663ae2d"
 	},
 	"builders": [
 	    {
@@ -20,7 +19,12 @@
 	      "ami_name": "rubber-docker-{{timestamp}}",
           "ami_groups": [
               "all"
-          ]
+          ],
+		  "ami_regions": [
+			"il-central-1",
+			"us-east-1",
+			"us-west-1"
+		  ]
 	    }
     ],
     "provisioners": [
