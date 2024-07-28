@@ -70,6 +70,10 @@ popd
 cat > /etc/rc.local <<'EOF'
 #!/bin/bash
 
+# Allow the git commands from rc.local on a root owned directory
+export HOME=/root
+git config --global --add safe.directory /workshop/rubber-docker
+
 # Pull latest version of rubber-docker, install requirements & build the C extension
 if [[ -d /workshop/rubber-docker ]]; then
     pushd /workshop/rubber-docker

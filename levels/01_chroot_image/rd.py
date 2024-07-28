@@ -75,7 +75,7 @@ def contain(command, image_name, image_dir, container_id, container_dir):
     # print('Created a new root fs for our container: {}'.format(new_root))
 
     # TODO: chroot into new_root
-    # TODO: something after chrooting? (HINT: try running: sudo python rd.py run -i ubuntu -- /bin/sh)
+    # TODO: something after chrooting? (HINT: try running: python3 rd.py run -i ubuntu -- /bin/sh)
 
     os.execvp(command[0], command)
 

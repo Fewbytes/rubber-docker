@@ -4,7 +4,7 @@ In this level we will get to know `rd.py` - the skeleton of our rubber-docker.
 `rd.py` already implements one CLI command - *run* using the *click* python module. It should be used like this:
 
 ```
-$ python rd.py run /bin/echo "Hello Docker"
+$ python3 rd.py run /bin/echo "Hello Docker"
 ```
 
 Right now, the skeleton doesn't actually do much, so at a bare minimum we need to make it run our executable.
@@ -48,7 +48,7 @@ else:
 ## How to check your work
 
 ```
-$ python rd.py run /bin/echo "Hello Docker"
+$ python3 rd.py run /bin/echo "Hello Docker"
 Hello Docker
 
 3620 exited with status 0
