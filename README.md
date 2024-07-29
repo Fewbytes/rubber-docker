@@ -23,6 +23,7 @@ We therefore wrote a python module called *linux* (take a look at [linux.c](linu
 Have a look at the [module documentation](https://rawgit.com/Fewbytes/rubber-docker/master/docs/linux/index.html) for more info.
 
 ## Quickstart
+### On AWS
 There are currently 3 options to start the workshop by yourself:
  1. We created a public AMI with the required configuration and utilities
     already installed:
@@ -37,6 +38,30 @@ There are currently 3 options to start the workshop by yourself:
  1. We have a [Vagrantfile](https://www.vagrantup.com/) for you to run using
     your favorite virtual machine hypervisor (NOTE: not yet fully tested).
 
+### On Azure
+We have a [packer template](https://www.packer.io/) so you can create your own
+VM on Azure with the following procedure:
+
+1. Build the image with Packer:
+    ```bash
+    $ packer build packer/rubber-docker-azure.json
+    ```
+1. Create the VM based on the new image:
+   ```bash
+   az vm create \
+	--resource-group PackerImages \
+	--name rubber-docker \
+	--location westus2 \
+	--image rubberDocker \
+	--admin-user ubuntu \
+	--generate-ssh-keys
+    ```
+1. Once the VM is built, you can connect to it with SSH with the username `ubuntu` and 
+   newly created private key: 
+
+    ```bash
+    $ ssh ubuntu@<myPublicIP> -i ~/.ssh/ubuntu
+    ```
 The workshop material is checked out at `/workshop` on the instance:
 - `/workshop/rubber-docker` - this repository, where you do all the work
 - `/workshop/images` - images for containers, already populated with ubuntu and busybox images
